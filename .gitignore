@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.env
+venv/
+.venv/
+env/
+*.egg-info/
+*.privacyshield
+*.key
+ui/node_modules/
+.DS_Store
