@@ -16,6 +16,13 @@ def validate_iban(iban):
 
 SWIFT_FALSE_POSITIVES = {"Rechnung","Paziente","Paciente","Telefono","Telefon","Patient","Diagnose","Betrag"}
 
+# Short common English words wrongly detected as PERSON on their own line
+PERSON_FALSE_POSITIVES = {
+    "Email","Phone","Name","Address","Date","Salary","Patient",
+    "Doctor","Diagnosis","Contact","Subject","From","To","Ref",
+    "Policy","Claim","Invoice","Total","Amount","Note","Dear"
+}
+
 ORG_FALSE_POSITIVES = {
     "SSN","DOB","EIN","NPI","ID","DOJ",
     "IL","MA","CA","NY","TX",
@@ -195,6 +202,10 @@ def _remove_false_positives(entities, text, document_type):
         et = entity["entity_type"]
         if et == "SWIFT_BIC" and (t in SWIFT_FALSE_POSITIVES or not t.isupper()):
             continue
+        if et == "PERSON" and t in PERSON_FALSE_POSITIVES:
+            continue
+        if et == "PERSON" and len(t.split()) == 1 and t.istitle() and len(t) < 6:
+            continue
         if et == "IBAN_CODE" and not validate_iban(t):
             continue
         if et == "ORGANIZATION" and t.upper() in {fp.upper() for fp in ORG_FALSE_POSITIVES}:
@@ -235,12 +246,27 @@ def detect_pii(text, language="auto", document_type="auto"):
     if document_type == "auto":
         document_type = auto_detect_document_type(text)
     analyzer = get_analyzer()
-    raw = analyzer.analyze(text=text, language=language, score_threshold=CONFIDENCE_THRESHOLD)
-    entities = [{"entity_type": r.entity_type, "text": text[r.start:r.end],
-                 "start": r.start, "end": r.end, "score": round(r.score, 3)} for r in raw]
-    entities = _remove_false_positives(entities, text, document_type)
-    entities = _deduplicate_entities(entities)
-    return entities
+
+    # Run NER line by line to prevent entities spanning across newlines
+    # Track offset so start/end positions map back to original text
+    all_entities = []
+    offset = 0
+    for line in text.split("\n"):
+        if line.strip():
+            raw = analyzer.analyze(text=line, language=language, score_threshold=CONFIDENCE_THRESHOLD)
+            for r in raw:
+                all_entities.append({
+                    "entity_type": r.entity_type,
+                    "text": line[r.start:r.end],
+                    "start": r.start + offset,
+                    "end": r.end + offset,
+                    "score": round(r.score, 3)
+                })
+        offset += len(line) + 1  # +1 for the newline character
+
+    all_entities = _remove_false_positives(all_entities, text, document_type)
+    all_entities = _deduplicate_entities(all_entities)
+    return all_entities
 
 def get_pii_summary(entities):
     summary = {}
