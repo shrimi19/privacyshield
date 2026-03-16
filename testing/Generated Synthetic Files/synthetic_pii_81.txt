@@ -1,0 +1,3 @@
+Employee Name: Elizabeth Smith
+Employee ID: EMP-8596
+ID Number: ID-193726

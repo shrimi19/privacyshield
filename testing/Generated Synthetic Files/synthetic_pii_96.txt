@@ -1,0 +1,3 @@
+Employee Name: Mary Rich
+Employee ID: EMP-9102
+ID Number: ID-110322

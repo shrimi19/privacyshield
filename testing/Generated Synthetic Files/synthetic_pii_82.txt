@@ -1,0 +1,7 @@
+Taxpayer Name: Jessica Brown
+SSN: 622-47-8837
+Taxpayer ID: TAX-786901
+Address: 173 Cooley Walks, Jordanview, ME 67996
+Phone: 4373661091
+IBAN: GB93TORF55000069848578
+Reference: RF745306
