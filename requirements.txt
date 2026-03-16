@@ -1,2 +1,16 @@
 flask>=3.0
 cryptography>=42.0
+pdf2image
+pdfplumber
+presidio-analyzer
+spacy
+langdetect
+numpy<2.0
+paddlepaddle==2.6.2
+paddleocr==2.7.3
+
+# spaCy language models must be installed separately:
+# python -m spacy download de_core_news_lg
+# python -m spacy download fr_core_news_lg
+# python -m spacy download es_core_news_lg
+# python -m spacy download it_core_news_lg
