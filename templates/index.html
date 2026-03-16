@@ -5,70 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PrivacyShield — PDF Redactor</title>
   <style>
-    /* ── reset & base ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0f1117;
-      --surface:   #1a1d27;
-      --border:    #2a2d3a;
-      --accent:    #6c63ff;
-      --accent-h:  #8b83ff;
-      --green:     #34d399;
-      --red:       #f87171;
-      --text:      #e2e8f0;
-      --text-dim:  #94a3b8;
-      --radius:    12px;
+      --bg: #0d1016;
+      --surface: #151a22;
+      --surface-2: #1b2230;
+      --border: #2a3444;
+      --accent: #4d9cff;
+      --accent-h: #78b3ff;
+      --green: #3ad29f;
+      --red: #ff6b7a;
+      --text: #e8eef8;
+      --text-dim: #9bb0c8;
+      --radius: 12px;
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
       color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      padding: 2rem 1.2rem;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(77,156,255,.22) 0%, rgba(77,156,255,0) 42%),
+        radial-gradient(circle at 90% 92%, rgba(58,210,159,.18) 0%, rgba(58,210,159,0) 40%),
+        var(--bg);
     }
 
-    /* ── card ──────────────────────────────────────────────────────── */
     .card {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 2.5rem 2rem;
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,.35);
+      padding: 2rem 1.2rem;
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
     }
 
-    .card h1 {
-      font-size: 1.6rem;
+    h1 {
+      font-size: 1.85rem;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      text-align: center;
+      color: var(--text-dim);
+      margin-top: .25rem;
+      margin-bottom: 1.3rem;
+      font-size: .95rem;
+    }
+
+    .flow {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      background: var(--surface-2);
+    }
+    .flow + .flow { margin-top: 1rem; }
+    .flow-tab { display: none; }
+    .flow-tab.active { display: block; }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .55rem;
+      margin-bottom: 1rem;
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: #101826;
+      color: var(--text-dim);
+      border-radius: 10px;
+      padding: .7rem .9rem;
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: .01em;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .tab-btn:hover {
+      border-color: #3f5778;
+      color: var(--text);
+    }
+    .tab-btn.active {
+      border-color: var(--accent);
+      background: rgba(77,156,255,.16);
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(77,156,255,.24);
+    }
+    .flow h2 {
+      font-size: 1.05rem;
       margin-bottom: .25rem;
     }
-    .card h1 span { color: var(--accent); }
-    .card .subtitle {
+    .flow-note {
       color: var(--text-dim);
-      font-size: .9rem;
-      margin-bottom: 1.8rem;
+      font-size: .86rem;
+      margin-bottom: .9rem;
     }
 
-    /* ── drop zone ────────────────────────────────────────────────── */
     .dropzone {
       border: 2px dashed var(--border);
       border-radius: var(--radius);
-      padding: 2.5rem 1rem;
+      padding: 1.2rem 1rem;
       cursor: pointer;
       transition: border-color .2s, background .2s;
       position: relative;
+      text-align: center;
+      background: rgba(255,255,255,.02);
     }
-    .dropzone:hover,
-    .dropzone.dragover {
+    .dropzone:hover, .dropzone.dragover {
       border-color: var(--accent);
-      background: rgba(108,99,255,.06);
+      background: rgba(77,156,255,.1);
     }
     .dropzone input {
       position: absolute;
@@ -76,86 +125,80 @@
       opacity: 0;
       cursor: pointer;
     }
-    .dropzone .icon {
-      font-size: 2.5rem;
-      margin-bottom: .6rem;
-    }
-    .dropzone p {
-      color: var(--text-dim);
-      font-size: .92rem;
-    }
+    .dropzone .icon { font-size: 2rem; margin-bottom: .35rem; }
+    .dropzone p { color: var(--text-dim); font-size: .9rem; }
     .dropzone p strong { color: var(--accent); }
 
-    /* ── file info row ────────────────────────────────────────────── */
     .file-info {
       display: none;
       align-items: center;
       gap: .75rem;
-      margin-top: 1.2rem;
-      padding: .75rem 1rem;
+      margin-top: .8rem;
+      padding: .6rem .8rem;
       border-radius: 8px;
-      background: rgba(108,99,255,.08);
+      background: rgba(77,156,255,.12);
       text-align: left;
     }
     .file-info.visible { display: flex; }
-    .file-info .fi-icon { font-size: 1.4rem; flex-shrink: 0; }
-    .file-info .fi-name {
+    .fi-name {
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: .88rem;
+      font-size: .85rem;
     }
-    .file-info .fi-size {
-      color: var(--text-dim);
-      font-size: .8rem;
-      white-space: nowrap;
-    }
-    .file-info .fi-remove {
+    .fi-size { color: var(--text-dim); font-size: .8rem; }
+    .fi-remove {
       background: none;
       border: none;
       color: var(--text-dim);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
     }
-    .file-info .fi-remove:hover { color: var(--red); background: rgba(248,113,113,.1); }
+    .fi-remove:hover { color: var(--red); background: rgba(197,48,48,.1); }
 
-    /* ── button ────────────────────────────────────────────────────── */
+    .field {
+      margin-top: .8rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      text-align: left;
+    }
+    .field label { font-size: .82rem; color: var(--text-dim); }
+    .field input {
+      border: 1px solid #314157;
+      border-radius: 8px;
+      padding: .6rem .7rem;
+      font-size: .9rem;
+      background: #111722;
+      color: var(--text);
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: .5rem;
-      margin-top: 1.4rem;
-      padding: .7rem 1.8rem;
+      margin-top: .9rem;
+      padding: .65rem 1.2rem;
       border: none;
       border-radius: 8px;
-      font-size: .95rem;
-      font-weight: 600;
+      font-size: .9rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: background .2s, transform .1s;
+      transition: background .2s;
       width: 100%;
+      text-decoration: none;
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
+    .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover:not(:disabled) { background: var(--accent-h); }
     .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-success { background: var(--green); color: #fff; }
+    .btn-success:hover { filter: brightness(1.06); }
 
-    .btn-success {
-      background: var(--green);
-      color: #0f1117;
-    }
-    .btn-success:hover { filter: brightness(1.08); }
-
-    /* ── progress bar ─────────────────────────────────────────────── */
-    .progress-wrap {
-      display: none;
-      margin-top: 1.2rem;
-    }
+    .progress-wrap { display: none; margin-top: .8rem; }
     .progress-wrap.visible { display: block; }
     .progress-bar {
       height: 6px;
@@ -163,33 +206,97 @@
       background: var(--border);
       overflow: hidden;
     }
-    .progress-bar .fill {
+    .fill {
       height: 100%;
       width: 0%;
       background: var(--accent);
-      border-radius: 3px;
-      transition: width .3s;
+      transition: width .25s;
     }
     .progress-label {
-      margin-top: .5rem;
-      font-size: .82rem;
+      margin-top: .35rem;
       color: var(--text-dim);
+      font-size: .8rem;
     }
 
-    /* ── status message ───────────────────────────────────────────── */
     .status {
-      margin-top: 1rem;
-      font-size: .88rem;
-      min-height: 1.4em;
+      margin-top: .65rem;
+      font-size: .85rem;
+      min-height: 1.35em;
     }
     .status.error { color: var(--red); }
     .status.success { color: var(--green); }
 
-    /* ── footer ───────────────────────────────────────────────────── */
-    footer {
-      margin-top: 2rem;
-      font-size: .78rem;
+    .key-wrap {
+      margin-top: .8rem;
+      display: none;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .65rem;
+      background: #121924;
+    }
+    .key-wrap.visible { display: block; }
+    .key-wrap strong {
+      display: block;
+      font-size: .84rem;
+      margin-bottom: .35rem;
+    }
+    .key-line {
+      font-family: Consolas, monospace;
+      font-size: .8rem;
+      line-height: 1.45;
+      background: #0e131c;
+      border: 1px solid #2c394d;
+      padding: .6rem;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+    .key-hint {
+      margin-top: .45rem;
+      color: var(--red);
+      font-size: .76rem;
+    }
+
+    .preview-grid {
+      display: none;
+      margin-top: .9rem;
+      gap: .8rem;
+      grid-template-columns: 1fr;
+    }
+    .preview-grid.visible { display: grid; }
+    .preview-panel {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #121924;
+      overflow: hidden;
+    }
+    .preview-head {
+      border-bottom: 1px solid var(--border);
+      padding: .45rem .6rem;
       color: var(--text-dim);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .preview-frame {
+      width: 100%;
+      border: 0;
+      min-height: 320px;
+      height: 56vh;
+      background: #0a0f17;
+    }
+
+    @media (min-width: 940px) {
+      .preview-grid { grid-template-columns: 1fr 1fr; }
+      .card { padding: 2.1rem 1.4rem; }
+    }
+
+    footer {
+      margin-top: 1.1rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: .78rem;
     }
   </style>
 </head>
@@ -197,70 +304,209 @@
 
 <div class="card">
   <h1><span>Privacy</span>Shield</h1>
-  <p class="subtitle">Upload a PDF to redact sensitive information</p>
+  <p class="subtitle">Redact, share safely, then restore with key when needed.</p>
 
-  <!-- drop zone -->
-  <div class="dropzone" id="dropzone">
-    <input type="file" id="fileInput" accept=".pdf" />
-    <div class="icon">📄</div>
-    <p>Drag &amp; drop your PDF here or <strong>browse</strong></p>
-    <p style="margin-top:.3rem;font-size:.78rem">Max 50 MB &middot; PDF only</p>
+  <div class="tabs" role="tablist" aria-label="PrivacyShield workflows">
+    <button class="tab-btn active" id="tabRedact" role="tab" aria-selected="true" aria-controls="panelRedact" data-tab="redact">
+      Redact PDF
+    </button>
+    <button class="tab-btn" id="tabDecrypt" role="tab" aria-selected="false" aria-controls="panelDecrypt" data-tab="decrypt">
+      Decrypt PDF
+    </button>
   </div>
 
-  <!-- selected file info -->
-  <div class="file-info" id="fileInfo">
-    <span class="fi-icon">📎</span>
-    <span class="fi-name" id="fileName"></span>
-    <span class="fi-size" id="fileSize"></span>
-    <button class="fi-remove" id="fileRemove" title="Remove">&times;</button>
-  </div>
+  <section class="flow flow-tab active" id="panelRedact" role="tabpanel" aria-labelledby="tabRedact">
+    <h2>1) Redact PDF and Generate Recovery Key</h2>
+    <p class="flow-note">Upload original PDF to get a redacted PDF and a decryption key.</p>
 
-  <!-- upload button -->
-  <button class="btn btn-primary" id="uploadBtn" disabled>
-    <span id="uploadBtnText">Upload &amp; Process</span>
-  </button>
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept=".pdf" />
+      <div class="icon">📄</div>
+      <p>Drag &amp; drop your PDF here or <strong>browse</strong></p>
+      <p style="margin-top:.2rem;font-size:.76rem">Max 50 MB · PDF only</p>
+    </div>
 
-  <!-- progress -->
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
-    <p class="progress-label" id="progressLabel">Uploading…</p>
-  </div>
+    <div class="file-info" id="fileInfo">
+      <span>📎</span>
+      <span class="fi-name" id="fileName"></span>
+      <span class="fi-size" id="fileSize"></span>
+      <button class="fi-remove" id="fileRemove" title="Remove">&times;</button>
+    </div>
 
-  <!-- download button (hidden until ready) -->
-  <a class="btn btn-success" id="downloadBtn" style="display:none" href="#">
-    ⬇&ensp;Download Redacted PDF
-  </a>
+    <button class="btn btn-primary" id="uploadBtn" disabled>
+      <span id="uploadBtnText">Upload &amp; Process</span>
+    </button>
 
-  <!-- status / error -->
-  <p class="status" id="status"></p>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+      <p class="progress-label" id="progressLabel">Uploading...</p>
+    </div>
+
+    <a class="btn btn-success" id="downloadBtn" style="display:none" href="#">
+      Download Redacted PDF
+    </a>
+
+    <div class="key-wrap" id="keyWrap">
+      <strong>Recovery Key (required to restore original PDF):</strong>
+      <p class="key-line" id="encryptionKey"></p>
+      <button class="btn btn-primary" id="copyKeyBtn" style="margin-top:.55rem">Copy Key</button>
+      <p class="key-hint">Save this key securely. If lost, original content cannot be restored.</p>
+    </div>
+
+    <p class="status" id="status"></p>
+
+    <div class="preview-grid" id="previewGrid">
+      <div class="preview-panel">
+        <p class="preview-head">Original PDF</p>
+        <iframe class="preview-frame" id="originalFrame" title="Original PDF preview"></iframe>
+      </div>
+      <div class="preview-panel">
+        <p class="preview-head">Redacted PDF</p>
+        <iframe class="preview-frame" id="redactedFrame" title="Redacted PDF preview"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="flow flow-tab" id="panelDecrypt" role="tabpanel" aria-labelledby="tabDecrypt">
+    <h2>2) Restore Original from Redacted PDF + Key</h2>
+    <p class="flow-note">Upload a PrivacyShield redacted PDF and paste its key to recover original content.</p>
+
+    <div class="dropzone" id="restoreDropzone">
+      <input type="file" id="restoreFileInput" accept=".pdf" />
+      <div class="icon">🗂</div>
+      <p>Drag &amp; drop redacted PDF here or <strong>browse</strong></p>
+      <p style="margin-top:.2rem;font-size:.76rem">PDF only</p>
+    </div>
+
+    <div class="file-info" id="restoreFileInfo">
+      <span>📎</span>
+      <span class="fi-name" id="restoreFileName"></span>
+      <span class="fi-size" id="restoreFileSize"></span>
+      <button class="fi-remove" id="restoreFileRemove" title="Remove">&times;</button>
+    </div>
+
+    <div class="field">
+      <label for="restoreKeyInput">Recovery Key</label>
+      <input type="text" id="restoreKeyInput" placeholder="Paste the key here" />
+    </div>
+
+    <button class="btn btn-primary" id="restoreBtn" disabled>Restore Original PDF</button>
+
+    <a class="btn btn-success" id="restoreDownloadBtn" style="display:none" href="#">
+      Download Restored Original
+    </a>
+
+    <p class="status" id="restoreStatus"></p>
+
+    <div class="preview-grid" id="restorePreviewGrid">
+      <div class="preview-panel">
+        <p class="preview-head">Redacted Input PDF</p>
+        <iframe class="preview-frame" id="restoreInputFrame" title="Redacted input preview"></iframe>
+      </div>
+      <div class="preview-panel">
+        <p class="preview-head">Restored Original PDF</p>
+        <iframe class="preview-frame" id="restoredFrame" title="Restored original preview"></iframe>
+      </div>
+    </div>
+  </section>
 </div>
 
 <footer>PrivacyShield &copy; 2026</footer>
 
 <script>
 (() => {
-  const dropzone    = document.getElementById('dropzone');
-  const fileInput   = document.getElementById('fileInput');
-  const fileInfo    = document.getElementById('fileInfo');
-  const fileName    = document.getElementById('fileName');
-  const fileSize    = document.getElementById('fileSize');
-  const fileRemove  = document.getElementById('fileRemove');
-  const uploadBtn   = document.getElementById('uploadBtn');
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const fileInfo = document.getElementById('fileInfo');
+  const fileName = document.getElementById('fileName');
+  const fileSize = document.getElementById('fileSize');
+  const fileRemove = document.getElementById('fileRemove');
+  const uploadBtn = document.getElementById('uploadBtn');
   const uploadBtnText = document.getElementById('uploadBtnText');
-  const progressWrap= document.getElementById('progressWrap');
-  const progressFill= document.getElementById('progressFill');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
   const progressLabel = document.getElementById('progressLabel');
   const downloadBtn = document.getElementById('downloadBtn');
-  const status      = document.getElementById('status');
+  const status = document.getElementById('status');
+  const previewGrid = document.getElementById('previewGrid');
+  const originalFrame = document.getElementById('originalFrame');
+  const redactedFrame = document.getElementById('redactedFrame');
+  const keyWrap = document.getElementById('keyWrap');
+  const encryptionKey = document.getElementById('encryptionKey');
+  const copyKeyBtn = document.getElementById('copyKeyBtn');
+
+  const restoreFileInput = document.getElementById('restoreFileInput');
+  const restoreDropzone = document.getElementById('restoreDropzone');
+  const restoreFileInfo = document.getElementById('restoreFileInfo');
+  const restoreFileName = document.getElementById('restoreFileName');
+  const restoreFileSize = document.getElementById('restoreFileSize');
+  const restoreFileRemove = document.getElementById('restoreFileRemove');
+  const restoreKeyInput = document.getElementById('restoreKeyInput');
+  const restoreBtn = document.getElementById('restoreBtn');
+  const restoreDownloadBtn = document.getElementById('restoreDownloadBtn');
+  const restoreStatus = document.getElementById('restoreStatus');
+  const restorePreviewGrid = document.getElementById('restorePreviewGrid');
+  const restoreInputFrame = document.getElementById('restoreInputFrame');
+  const restoredFrame = document.getElementById('restoredFrame');
+  const tabRedact = document.getElementById('tabRedact');
+  const tabDecrypt = document.getElementById('tabDecrypt');
+  const panelRedact = document.getElementById('panelRedact');
+  const panelDecrypt = document.getElementById('panelDecrypt');
 
   let selectedFile = null;
+  let originalBlobUrl = null;
+  let restoreInputBlobUrl = null;
 
-  /* ── helpers ─────────────────────────────────────────────────── */
   const formatBytes = (b) => {
     if (b < 1024) return b + ' B';
     if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
     return (b / 1048576).toFixed(1) + ' MB';
   };
+
+  const setActiveTab = (tabName) => {
+    const onRedact = tabName === 'redact';
+    tabRedact.classList.toggle('active', onRedact);
+    tabDecrypt.classList.toggle('active', !onRedact);
+    panelRedact.classList.toggle('active', onRedact);
+    panelDecrypt.classList.toggle('active', !onRedact);
+    tabRedact.setAttribute('aria-selected', onRedact ? 'true' : 'false');
+    tabDecrypt.setAttribute('aria-selected', onRedact ? 'false' : 'true');
+  };
+
+  const updateRestoreButtonState = () => {
+    const hasFile = !!(restoreFileInput.files && restoreFileInput.files[0]);
+    const hasKey = restoreKeyInput.value.trim().length > 0;
+    restoreBtn.disabled = !(hasFile && hasKey);
+  };
+
+  const setRestoreSelectedFile = (file) => {
+    if (!file || !file.name.toLowerCase().endsWith('.pdf')) {
+      restoreStatus.textContent = 'Please drop/select a PDF file.';
+      restoreStatus.className = 'status error';
+      return;
+    }
+
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    restoreFileInput.files = dt.files;
+
+    restoreFileName.textContent = file.name;
+    restoreFileSize.textContent = formatBytes(file.size);
+    restoreFileInfo.classList.add('visible');
+
+    if (restoreInputBlobUrl) URL.revokeObjectURL(restoreInputBlobUrl);
+    restoreInputBlobUrl = URL.createObjectURL(file);
+    restoreInputFrame.src = restoreInputBlobUrl;
+    restorePreviewGrid.classList.remove('visible');
+    restoredFrame.removeAttribute('src');
+    restoreDownloadBtn.style.display = 'none';
+    restoreStatus.textContent = '';
+    restoreStatus.className = 'status';
+    updateRestoreButtonState();
+  };
+
+  tabRedact.addEventListener('click', () => setActiveTab('redact'));
+  tabDecrypt.addEventListener('click', () => setActiveTab('decrypt'));
 
   const reset = () => {
     selectedFile = null;
@@ -271,6 +517,15 @@
     progressWrap.classList.remove('visible');
     progressFill.style.width = '0%';
     downloadBtn.style.display = 'none';
+    previewGrid.classList.remove('visible');
+    redactedFrame.removeAttribute('src');
+    originalFrame.removeAttribute('src');
+    keyWrap.classList.remove('visible');
+    encryptionKey.textContent = '';
+    if (originalBlobUrl) {
+      URL.revokeObjectURL(originalBlobUrl);
+      originalBlobUrl = null;
+    }
     status.textContent = '';
     status.className = 'status';
   };
@@ -282,12 +537,20 @@
     fileInfo.classList.add('visible');
     uploadBtn.disabled = false;
     downloadBtn.style.display = 'none';
+    keyWrap.classList.remove('visible');
+    previewGrid.classList.remove('visible');
+    redactedFrame.removeAttribute('src');
+    if (originalBlobUrl) URL.revokeObjectURL(originalBlobUrl);
+    originalBlobUrl = URL.createObjectURL(file);
+    originalFrame.src = originalBlobUrl;
     status.textContent = '';
     status.className = 'status';
   };
 
-  /* ── drag & drop ─────────────────────────────────────────────── */
-  dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
   dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
   dropzone.addEventListener('drop', (e) => {
     e.preventDefault();
@@ -304,35 +567,46 @@
   fileInput.addEventListener('change', () => {
     if (fileInput.files.length) showFile(fileInput.files[0]);
   });
-
   fileRemove.addEventListener('click', reset);
 
-  /* ── upload ──────────────────────────────────────────────────── */
+  copyKeyBtn.addEventListener('click', async () => {
+    const keyValue = encryptionKey.textContent.trim();
+    if (!keyValue) return;
+    try {
+      await navigator.clipboard.writeText(keyValue);
+      status.textContent = 'Recovery key copied to clipboard.';
+      status.className = 'status success';
+    } catch (_err) {
+      status.textContent = 'Could not copy key automatically. Please copy it manually.';
+      status.className = 'status error';
+    }
+  });
+
   uploadBtn.addEventListener('click', async () => {
     if (!selectedFile) return;
 
     uploadBtn.disabled = true;
-    uploadBtnText.textContent = 'Processing…';
+    uploadBtnText.textContent = 'Processing...';
     progressWrap.classList.add('visible');
     progressFill.style.width = '0%';
-    progressLabel.textContent = 'Uploading…';
+    progressLabel.textContent = 'Uploading...';
     status.textContent = '';
     status.className = 'status';
     downloadBtn.style.display = 'none';
+    keyWrap.classList.remove('visible');
+    previewGrid.classList.remove('visible');
+    redactedFrame.removeAttribute('src');
 
     const formData = new FormData();
     formData.append('file', selectedFile);
 
     try {
       const xhr = new XMLHttpRequest();
-
-      // track upload progress
       xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const pct = Math.round((e.loaded / e.total) * 100);
-          progressFill.style.width = pct + '%';
-          progressLabel.textContent = `Uploading… ${pct}%`;
-        }
+        if (!e.lengthComputable) return;
+        const pct = Math.round((e.loaded / e.total) * 100);
+        progressFill.style.width = pct + '%';
+        progressLabel.textContent = `Uploading... ${pct}%`;
       });
 
       const response = await new Promise((resolve, reject) => {
@@ -343,7 +617,7 @@
       });
 
       progressFill.style.width = '100%';
-      progressLabel.textContent = 'Processing…';
+      progressLabel.textContent = 'Processing...';
 
       if (response.status !== 200) {
         const err = JSON.parse(response.responseText);
@@ -351,16 +625,18 @@
       }
 
       const data = JSON.parse(response.responseText);
-
-      // done!
       progressLabel.textContent = 'Done!';
-      status.textContent = 'Your redacted PDF is ready.';
+      status.textContent = 'Redacted PDF and key generated successfully.';
       status.className = 'status success';
       uploadBtnText.textContent = 'Upload & Process';
 
+      encryptionKey.textContent = data.encryption_key || '';
+      keyWrap.classList.add('visible');
+
       downloadBtn.href = `/download/${data.job_id}?name=${encodeURIComponent(data.download_name)}`;
       downloadBtn.style.display = 'inline-flex';
-
+      redactedFrame.src = `/preview/${data.job_id}/redacted`;
+      previewGrid.classList.add('visible');
     } catch (err) {
       status.textContent = err.message;
       status.className = 'status error';
@@ -368,6 +644,100 @@
       progressWrap.classList.remove('visible');
     } finally {
       uploadBtn.disabled = false;
+    }
+  });
+
+  restoreDropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    restoreDropzone.classList.add('dragover');
+  });
+  restoreDropzone.addEventListener('dragleave', () => restoreDropzone.classList.remove('dragover'));
+  restoreDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    restoreDropzone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    setRestoreSelectedFile(file);
+  });
+
+  restoreFileInput.addEventListener('change', () => {
+    const file = restoreFileInput.files && restoreFileInput.files[0];
+    setRestoreSelectedFile(file);
+  });
+
+  restoreKeyInput.addEventListener('input', updateRestoreButtonState);
+
+  restoreFileRemove.addEventListener('click', () => {
+    restoreFileInput.value = '';
+    restoreFileInfo.classList.remove('visible');
+    if (restoreInputBlobUrl) {
+      URL.revokeObjectURL(restoreInputBlobUrl);
+      restoreInputBlobUrl = null;
+    }
+    restoreInputFrame.removeAttribute('src');
+    restorePreviewGrid.classList.remove('visible');
+    restoredFrame.removeAttribute('src');
+    restoreDownloadBtn.style.display = 'none';
+    restoreStatus.textContent = '';
+    restoreStatus.className = 'status';
+    updateRestoreButtonState();
+  });
+
+  updateRestoreButtonState();
+
+  restoreBtn.addEventListener('click', async () => {
+    const file = restoreFileInput.files && restoreFileInput.files[0];
+    const key = restoreKeyInput.value.trim();
+
+    if (!file) {
+      restoreStatus.textContent = 'Please upload a redacted PDF.';
+      restoreStatus.className = 'status error';
+      return;
+    }
+    if (!key) {
+      restoreStatus.textContent = 'Please paste the recovery key.';
+      restoreStatus.className = 'status error';
+      return;
+    }
+
+    restoreBtn.disabled = true;
+    restoreBtn.textContent = 'Restoring...';
+    restoreStatus.textContent = '';
+    restoreStatus.className = 'status';
+    restoreDownloadBtn.style.display = 'none';
+    restorePreviewGrid.classList.remove('visible');
+    restoredFrame.removeAttribute('src');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('key', key);
+
+      const response = await fetch('/restore', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Restore failed.');
+      }
+
+      restoreDownloadBtn.href = `/download-restored/${data.restore_id}?name=${encodeURIComponent(data.download_name)}`;
+      restoreDownloadBtn.style.display = 'inline-flex';
+      restoredFrame.src = `/preview-restored/${data.restore_id}`;
+      if (restoreInputBlobUrl) {
+        restoreInputFrame.src = restoreInputBlobUrl;
+      }
+      restorePreviewGrid.classList.add('visible');
+
+      restoreStatus.textContent = 'Original PDF restored successfully.';
+      restoreStatus.className = 'status success';
+    } catch (err) {
+      restoreStatus.textContent = err.message;
+      restoreStatus.className = 'status error';
+    } finally {
+      restoreBtn.disabled = false;
+      restoreBtn.textContent = 'Restore Original PDF';
     }
   });
 })();

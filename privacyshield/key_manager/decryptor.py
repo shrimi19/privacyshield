@@ -97,3 +97,19 @@ def decrypt_token_map(
 
     logger.info(f"Successfully decrypted {len(token_map)} tokens from {shield_path}")
     return token_map
+
+
+def decrypt_bytes(encrypted_payload: bytes, key: bytes | str) -> bytes:
+    """Decrypt arbitrary encrypted bytes using a bytes or string key."""
+    if isinstance(key, str):
+        try:
+            key = string_to_key(key)
+        except Exception:
+            raise ValueError("Invalid key format.")
+
+    try:
+        return Fernet(key).decrypt(encrypted_payload)
+    except InvalidToken:
+        raise ValueError(
+            "Decryption failed — wrong key or corrupted encrypted payload."
+        )

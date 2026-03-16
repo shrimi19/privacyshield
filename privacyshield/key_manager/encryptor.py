@@ -96,6 +96,13 @@ def string_to_key(key_str: str) -> bytes:
     return base64.b64decode(key_str.encode("utf-8"))
 
 
+def encrypt_bytes(data: bytes, key: bytes) -> bytes:
+    """Encrypt arbitrary bytes using Fernet key bytes."""
+    if not data:
+        raise ValueError("No data provided to encrypt.")
+    return Fernet(key).encrypt(data)
+
+
 def encrypt_token_map(
     token_map: Dict[str, str],
     output_path: str | Path,
