@@ -1,25 +1,9 @@
-"""
-pipeline.py
-===========
-PURPOSE:
-    Orchestrates the full redaction pipeline for a PDF file.
-    Connects analyzer → extractor → ner_engine → redactor.
-    Handles text, scanned, and mixed pages.
-
-FLOW:
-    1. analyze_pdf()         → classify each page (text/scanned/mixed)
-    2. Text pages            → text pipeline (extract → NER → redact)
-    3. Scanned pages         → image pipeline (OCR → NER → image redact)
-    4. Mixed pages           → both pipelines
-    5. Return redacted pages + token map
-"""
-
 import logging
 from pathlib import Path
 
 from privacyshield.analyzer.pdf_analyzer import analyze_pdf, PageType
 from privacyshield.text_pipeline.extractor import extract_text_pages, get_merged_bbox_for_span
-from privacyshield.text_pipeline.ner_engine import detect_pii
+from privacyshield.text_pipeline.ner_engine import detect_pii, auto_detect_language, auto_detect_document_type
 from privacyshield.text_pipeline.redactor import redact_text, get_redaction_stats
 from privacyshield.image_pipeline.pdf_to_image import pdf_page_to_image
 from privacyshield.image_pipeline.ocr_engine import extract_text_with_coords
@@ -56,23 +40,50 @@ def _get_redaction_boxes_fitz(pdf_path, page_num, entities, page_height):
     return boxes
 
 
-def _run_image_pipeline_on_page(pdf_path, page_num):
+def _run_image_pipeline_on_page(pdf_path, page_num, token_map=None):
     """
-    Run OCR + NER + redaction on a single page.
+    Run OCR + NER + redaction on a single page image.
     Returns (redacted_image, pii_regions) or (None, []) on failure.
+    token_map is passed to image_redactor to draw token labels on boxes.
     """
     try:
         image = pdf_page_to_image(pdf_path, page_num=page_num - 1)
         regions = extract_text_with_coords(image)
 
+        if not regions:
+            return None, []
+
+        # Build full page text for context-aware detection
+        full_text = "\n".join(r["text"] for r in regions)
+        language = auto_detect_language(full_text)
+        document_type = auto_detect_document_type(full_text)
+
+        # Run NER on each region — also build token map for new PII found
         pii_regions = []
+        local_token_map = dict(token_map) if token_map else {}
+
         for region in regions:
-            entities = detect_pii(region["text"])
+            entities = detect_pii(
+                region["text"],
+                language=language,
+                document_type=document_type,
+            )
             if entities:
+                # Add any new tokens found in image to token map
+                from privacyshield.text_pipeline.redactor import redact_text as _redact
+                _, local_token_map = _redact(
+                    region["text"],
+                    entities,
+                    existing_token_map=local_token_map,
+                )
                 pii_regions.append(region)
 
-        redacted_image = redact_regions(image, pii_regions)
-        logger.info(f"Page {page_num}: image pipeline redacted {len(pii_regions)}/{len(regions)} regions")
+        # Pass token map so image_redactor can draw labels
+        redacted_image = redact_regions(image, pii_regions, token_map=local_token_map)
+        logger.info(
+            f"Page {page_num}: image pipeline redacted "
+            f"{len(pii_regions)}/{len(regions)} regions"
+        )
         return redacted_image, pii_regions
 
     except Exception as e:
@@ -84,12 +95,6 @@ def run_text_pipeline(pdf_path: str) -> dict:
     """
     Run the full redaction pipeline on a PDF.
     Handles text, scanned, and mixed pages.
-
-    Args:
-        pdf_path: Path to the input PDF file.
-
-    Returns:
-        Dict with redacted pages, token map, and stats.
     """
     pdf_path = str(pdf_path)
     logger.info(f"Starting pipeline: {pdf_path}")
@@ -102,14 +107,16 @@ def run_text_pipeline(pdf_path: str) -> dict:
     pages_to_extract = analysis.text_pages + analysis.mixed_pages
     if not pages_to_extract:
         logger.warning("No text pages found — may be fully scanned PDF")
-
-    extraction = extract_text_pages(pdf_path, page_numbers=pages_to_extract)
+        extraction_pages = []
+    else:
+        extraction = extract_text_pages(pdf_path, page_numbers=pages_to_extract)
+        extraction_pages = extraction.pages
 
     # ── Step 3 + 4: NER + Redaction on text/mixed pages ───────────────────────
     global_token_map = {}
     redacted_pages = []
 
-    for page_ext in extraction.pages:
+    for page_ext in extraction_pages:
         page_num = page_ext.page_number
         text = page_ext.full_text
 
@@ -122,23 +129,25 @@ def run_text_pipeline(pdf_path: str) -> dict:
                 "redacted_text": "",
                 "entities": [],
                 "redaction_boxes": [],
+                "redacted_image": None,
+                "pii_region_count": 0,
             })
             continue
 
-        # Detect PII
+        # Detect PII in text layer
         try:
             entities = detect_pii(text)
-            logger.info(f"Page {page_num}: {len(entities)} PII entities found")
+            logger.info(f"Page {page_num}: {len(entities)} PII entities found in text layer")
         except Exception as e:
             logger.error(f"Page {page_num}: NER failed — {e}")
             entities = []
 
-        # Get bounding boxes
+        # Get bounding boxes for text layer PII
         redaction_boxes = _get_redaction_boxes_fitz(
             pdf_path, page_num, entities, page_ext.height
         )
 
-        # Redact text
+        # Redact text — updates global_token_map
         try:
             redacted_text, global_token_map = redact_text(
                 text, entities, existing_token_map=global_token_map
@@ -163,10 +172,14 @@ def run_text_pipeline(pdf_path: str) -> dict:
             "pii_region_count": 0,
         }
 
-        # ── If mixed page: also run image pipeline ─────────────────────────────
+        # ── Mixed pages: ALSO run image pipeline for embedded scanned content ──
+        # Pass global_token_map so image labels stay consistent with text labels.
+        # Image overlay goes FIRST in pdf_merger, then text boxes on top.
         if page_type == "mixed":
-            logger.info(f"Page {page_num}: mixed — also running image pipeline")
-            redacted_image, pii_regions = _run_image_pipeline_on_page(pdf_path, page_num)
+            logger.info(f"Page {page_num}: mixed — running image pipeline for embedded content")
+            redacted_image, pii_regions = _run_image_pipeline_on_page(
+                pdf_path, page_num, token_map=global_token_map
+            )
             page_result["redacted_image"] = redacted_image
             page_result["pii_region_count"] = len(pii_regions)
 
@@ -175,7 +188,9 @@ def run_text_pipeline(pdf_path: str) -> dict:
     # ── Step 5: Run image pipeline on scanned pages ────────────────────────────
     for page_num in analysis.scanned_pages:
         logger.info(f"Page {page_num}: scanned — running image pipeline")
-        redacted_image, pii_regions = _run_image_pipeline_on_page(pdf_path, page_num)
+        redacted_image, pii_regions = _run_image_pipeline_on_page(
+            pdf_path, page_num, token_map=global_token_map
+        )
 
         redacted_pages.append({
             "page_number": page_num,
