@@ -5,7 +5,6 @@ Upload a PDF → process it → download the result.
 """
 
 import uuid
-import shutil
 from io import BytesIO
 from pathlib import Path
 
@@ -20,6 +19,7 @@ from flask import (
 from privacyshield.key_manager.encryptor import (
     generate_key,
     key_to_string,
+    string_to_key,
     encrypt_bytes,
 )
 from privacyshield.key_manager.decryptor import decrypt_bytes
@@ -99,26 +99,42 @@ def upload():
     upload_path = UPLOAD_DIR / f"{job_id}.pdf"
     file.save(str(upload_path))
 
-    # ── processing stub ──────────────────────────────────────────────────
-    # TODO: plug real pipeline here:
-    #   from privacyshield.pipeline import run_pipeline
-    #   result = run_pipeline(str(upload_path))
-    #
-    # For now we simply copy the input PDF as the "processed" output.
     output_path = OUTPUT_DIR / f"{job_id}_redacted.pdf"
-    shutil.copy2(str(upload_path), str(output_path))
+    shield_path = OUTPUT_DIR / f"{job_id}.privacyshield"
 
-    # Encrypt and embed original bytes into the downloadable redacted file.
-    # User gets the key separately; app never stores it.
-    key = generate_key()
+    # Run full pipeline redaction and generate key via reconstructor flow.
+    # This replaces the old placeholder behavior that copied original PDF.
+    try:
+        from privacyshield.reconstructor.pdf_merger import redact_pdf
+
+        key_string = redact_pdf(
+            input_pdf_path=str(upload_path),
+            output_pdf_path=str(output_path),
+            shield_path=str(shield_path),
+        )
+    except Exception as e:
+        _safe_unlink(upload_path)
+        _safe_unlink(output_path)
+        _safe_unlink(shield_path)
+        return jsonify({"error": f"Redaction pipeline failed: {e}"}), 500
+
+    # If no PII is detected, pipeline may not produce a key.
+    # Keep UI contract intact by generating a recovery key for payload decrypt.
+    if key_string:
+        key = string_to_key(key_string)
+    else:
+        key = generate_key()
+        key_string = key_to_string(key)
+
+    # Keep current restore UX (redacted PDF + key only) by embedding encrypted
+    # original bytes into the redacted file using the same key string.
     _embed_encrypted_original(output_path, upload_path, key)
-    # ─────────────────────────────────────────────────────────────────────
 
     return jsonify({
         "job_id": job_id,
         "original_name": original_name,
         "download_name": f"{safe_stem}_redacted.pdf",
-        "encryption_key": key_to_string(key),
+        "encryption_key": key_string,
     })
 
 
@@ -130,6 +146,7 @@ def download(job_id):
         return jsonify({"error": "Invalid job id."}), 400
 
     output_path = OUTPUT_DIR / f"{job_id}_redacted.pdf"
+    shield_path = OUTPUT_DIR / f"{job_id}.privacyshield"
     upload_path = UPLOAD_DIR / f"{job_id}.pdf"
 
     if not output_path.exists():
@@ -139,6 +156,7 @@ def download(job_id):
 
     pdf_bytes = output_path.read_bytes()
     _safe_unlink(output_path)
+    _safe_unlink(shield_path)
     _safe_unlink(upload_path)
 
     return send_file(
