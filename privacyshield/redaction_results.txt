@@ -1,0 +1,824 @@
+Testing directory: C:\Users\Shrimi Agrawal\privacyshield\testing\GSF
+Exists: True
+
+[1] synthetic_doc_1.pdf
+  Stats: {'ORG': 2, 'NAME': 2, 'DATE': 3, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 10}
+  Key: TllSaXFUUjM3bUhHUGMw...
+  ✗ NOT REDACTED: Amanda Norton
+  ✗ NOT REDACTED: b0a46200-1248-40f1-9af3-fe7416d51798
+  ✓ Redacted: 9475 Deborah Corners, New Jason, MI 15349
+  ✓ Redacted: 5817139953
+  ✓ Redacted: Vickie Nguyen
+
+[2] synthetic_doc_2.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 1, 'NAME': 4, 'TOTAL': 11}
+  Key: bmk2dGF2N0ltbE45UVJ3...
+  ✓ Redacted: Barbara Harris
+  ✓ Redacted: 04775 Hamilton Pines
+  ✗ NOT REDACTED: 8ac4ef2d-0dbc-4ddc-a1ae-1c8bea53d9c8
+
+[3] synthetic_doc_3.pdf
+  Stats: {'NRP': 1, 'ORG': 3, 'IBAN': 1, 'AMOUNT': 10, 'PHONE': 1, 'NAME': 3, 'ADDRESS': 1, 'DATE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: VTZuaXd0UHJYUmpMb2hh...
+  ✓ Redacted: Nicole Cook
+  ✓ Redacted: 070-26-0128
+  ✗ NOT REDACTED: TAX-797478
+  ✓ Redacted: 455 Christine Trail, Alexandermouth, RI 10434
+  ✓ Redacted: 607-513-3312
+  ✓ Redacted: GB16XZMP71122360838675
+  ✗ NOT REDACTED: RF246969
+
+[4] synthetic_doc_4.pdf
+  Stats: {'NAME': 5, 'ORG': 2, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 11}
+  Key: UFhBVGQ5TTdpRmttVVhQ...
+  ✗ NOT REDACTED: Michael Hernandez
+  ✗ NOT REDACTED: e8bf5759-f96a-49c2-bbeb-220ba65639a2
+  ✓ Redacted: Unit 1153 Box 2079, DPO AP 41698
+  ✓ Redacted: (775)739-8211
+  ✓ Redacted: Andrew Moss
+
+[5] synthetic_doc_5.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 11}
+  Key: WXNab0l3MjNDa0FYbnNu...
+  ✓ Redacted: Mark Howard
+  ✓ Redacted: EMP-8730
+  ✗ NOT REDACTED: ID-409023
+
+[6] synthetic_doc_6.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 2, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 2, 'DATE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: RVI5R1JyS0o1LWVoU1cz...
+  ✓ Redacted: Benjamin Mills
+  ✓ Redacted: 164-73-5737
+  ✗ NOT REDACTED: TAX-116243
+  ✓ Redacted: 268 Michael Causeway, West Kaylachester, KS 36751
+  ✓ Redacted: 210-798-0484
+  ✓ Redacted: GB43DYSH13025689498769
+  ✗ NOT REDACTED: RF835318
+
+[7] synthetic_doc_7.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 1, 'TOTAL': 7}
+  Key: ejZOdlotY1RJeElxd1ct...
+  ✓ Redacted: Renee Boyer
+  ✗ NOT REDACTED: 4846 Jackson Extension Suite 110
+  ✗ NOT REDACTED: de33d996-b555-4c39-9425-46007db7b630
+
+[8] synthetic_doc_8.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'DATE': 3, 'PHONE': 1, 'SSN': 1, 'TOTAL': 23}
+  Key: MlZCc3J2dHZIZy0xSE5i...
+  ✓ Redacted: Tyler Moore
+  ✓ Redacted: 328-10-5094
+  ✗ NOT REDACTED: TAX-627378
+  ✓ Redacted: Unit 8514 Box 5965, DPO AP 77452
+  ✓ Redacted: 513-552-7466
+  ✓ Redacted: GB80DFSA01380017864090
+  ✗ NOT REDACTED: RF544334
+
+[9] synthetic_doc_9.pdf
+  Stats: {'NAME': 5, 'ORG': 1, 'DATE': 4, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 12}
+  Key: dnRvUnp1NWI1UEptWEFm...
+  ✗ NOT REDACTED: Amanda Coleman
+  ✗ NOT REDACTED: 94f99a18-af08-4ff6-bbd4-576e1c968f49
+  ✓ Redacted: 312 Barker Mews Apt. 349, Williamland, MP 60153
+  ✓ Redacted: 701-818-2482
+  ✓ Redacted: Lisa Washington
+
+[10] synthetic_doc_10.pdf
+  Stats: {'DATE': 3, 'ORG': 3, 'AMOUNT': 1, 'NAME': 4, 'TOTAL': 11}
+  Key: NUk2ZzBTZGU1VnJYLUJr...
+  ✓ Redacted: John Castro
+  ✓ Redacted: 7873 Preston Corner
+  ✗ NOT REDACTED: fd73bf8b-5901-49b4-b00a-f0881630edb4
+
+[11] synthetic_doc_11.pdf
+  Stats: {'ORG': 5, 'IBAN': 1, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 1, 'DATE': 1, 'NAME': 2, 'SSN': 1, 'TOTAL': 22}
+  Key: cGY0ekhIbUpUcmlIVTFX...
+  ✓ Redacted: Alexa Hunt
+  ✓ Redacted: 404-39-2062
+  ✓ Redacted: TAX-618597
+  ✓ Redacted: 58935 Amanda Vista Suite 349, Johnstonshire, GA 09204
+  ✓ Redacted: (677)437-6540
+  ✓ Redacted: GB48HEON92513316406982
+  ✗ NOT REDACTED: RF922846
+
+[12] synthetic_doc_12.pdf
+  Stats: {'ORG': 1, 'NAME': 3, 'DATE': 4, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 11}
+  Key: cUpkbDN0THpodlRuaE5y...
+  ✗ NOT REDACTED: Suzanne Johnson
+  ✗ NOT REDACTED: 7a3b5c09-5b90-414a-98c1-a27ae8e2c7e7
+  ✓ Redacted: 28802 Harry Shoal Apt. 076, Deborahside, NJ 05424
+  ✓ Redacted: (344)442-1747
+  ✓ Redacted: Theresa Wright
+
+[13] synthetic_doc_13.pdf
+  Stats: {'NRP': 1, 'NAME': 2, 'IBAN': 1, 'ORG': 2, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 2, 'DATE': 1, 'SSN': 1, 'TOTAL': 21}
+  Key: cHpiRVFNN0pMMHpkM2t0...
+  ✓ Redacted: Austin Sims
+  ✓ Redacted: 772-51-5853
+  ✗ NOT REDACTED: TAX-980495
+  ✓ Redacted: 94774 Pennington Manor, Taylorstad, OK 28697
+  ✓ Redacted: 219-628-9124
+  ✓ Redacted: GB19LIGS69044570350007
+  ✗ NOT REDACTED: RF987047
+
+[14] synthetic_doc_14.pdf
+  Stats: {'ORG': 3, 'NAME': 4, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 11}
+  Key: OXI4dk1UUC1yb0JqNFl0...
+  ✗ NOT REDACTED: Angela Anderson
+  ✗ NOT REDACTED: 45c0d4f3-eeda-4142-8463-649e0a24e8f1
+  ✓ Redacted: 0186 Michael Locks, North Gerald, CO 35589
+  ✓ Redacted: 4678017455
+  ✓ Redacted: Michael Kim
+
+[15] synthetic_doc_15.pdf
+  Stats: {'DATE': 3, 'ORG': 4, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 10}
+  Key: bTN5M0t6SlF3TkpvakFq...
+  ✓ Redacted: Robert Howard
+  ✓ Redacted: PSC 3282, Box 6412
+  ✗ NOT REDACTED: 81a3cf6c-1fdb-4d9b-8737-5a9aaaf2c062
+
+[16] synthetic_doc_16.pdf
+  Stats: {'DATE': 2, 'ORG': 2, 'AMOUNT': 1, 'NAME': 4, 'TOTAL': 9}
+  Key: MEtqNDdvNzNFbzg0ZUZu...
+  ✓ Redacted: Annette Ellis
+  ✗ NOT REDACTED: 08840 Donna Light
+  ✗ NOT REDACTED: 7a9a0f78-a69e-4b02-a5f8-71152ae259a9
+
+[17] synthetic_doc_17.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 2, 'ADDRESS': 2, 'AMOUNT': 10, 'DATE': 1, 'PHONE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: Z19JbFJRdTdmbENYa21L...
+  ✓ Redacted: Randall Ferrell
+  ✓ Redacted: 866-43-4132
+  ✗ NOT REDACTED: TAX-313535
+  ✓ Redacted: 8964 Allen Pines, Maryhaven, TN 36613
+  ✓ Redacted: (347)276-9953
+  ✓ Redacted: GB96ICYM00648327454451
+  ✗ NOT REDACTED: RF697765
+
+[18] synthetic_doc_18.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 1, 'NAME': 5, 'TOTAL': 9}
+  Key: WnZNUWdLbkdPNTVnOXhM...
+  ✓ Redacted: Mark Jackson
+  ✓ Redacted: 1025 Patton Grove Apt. 109
+  ✗ NOT REDACTED: ebb22063-2e1f-43d6-ade4-8bc3b0f85897
+
+[19] synthetic_doc_19.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 11}
+  Key: SjFCTVE1RXVrNklIZm9J...
+  ✓ Redacted: Luis Kidd
+  ✓ Redacted: EMP-2285
+  ✗ NOT REDACTED: ID-347197
+
+[20] synthetic_doc_20.pdf
+  Stats: {'DATE': 2, 'ORG': 2, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 8}
+  Key: UHlPYlVFSklkcFk4dVJZ...
+  ✓ Redacted: Heather Salinas
+  ✗ NOT REDACTED: 4535 Hopkins Crescent
+  ✗ NOT REDACTED: 9db060e1-477a-47cf-bf3c-9cf8ab083273
+
+[21] synthetic_doc_21.pdf
+  Stats: {'NAME': 4, 'ORG': 3, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 11}
+  Key: VXp5azJVRTQxNU1xRmxR...
+  ✗ NOT REDACTED: Robert Austin
+  ✗ NOT REDACTED: 2b1b81ee-61a8-453d-82ba-df541fad1aee
+  ✓ Redacted: 455 Anderson Overpass Suite 697, North Toniberg, ID 98542
+  ✓ Redacted: 799-394-6006
+  ✓ Redacted: Curtis Castaneda
+
+[22] synthetic_doc_22.pdf
+  Stats: {'NRP': 1, 'NAME': 2, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'DATE': 2, 'PHONE': 1, 'ADDRESS': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: REpib3E1a0hoTFNhMkh1...
+  ✓ Redacted: David Garcia
+  ✓ Redacted: 730-85-9594
+  ✗ NOT REDACTED: TAX-719145
+  ✓ Redacted: 94940 Diaz Loaf Suite 681, South Jasonburgh, NJ 92658
+  ✓ Redacted: 548-456-6415
+  ✓ Redacted: GB69BXLM30259222741516
+  ✗ NOT REDACTED: RF142062
+
+[23] synthetic_doc_23.pdf
+  Stats: {'ORG': 1, 'NAME': 3, 'DATE': 5, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 12}
+  Key: eDVKZEVuZkMxNFlUQ1pT...
+  ✗ NOT REDACTED: Joseph Parker
+  ✗ NOT REDACTED: 7e4d3eb4-4d66-45af-9bed-c0558bdf7a99
+  ✓ Redacted: 57609 Elizabeth Land, Johnton, NC 28392
+  ✓ Redacted: (674)495-0919
+  ✓ Redacted: Julie Oliver
+
+[24] synthetic_doc_24.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 7}
+  Key: UWhTY1FPQWhtLTdRaEtT...
+  ✓ Redacted: Karen Salinas
+  ✗ NOT REDACTED: 84930 Wang Rapid
+  ✗ NOT REDACTED: e5443297-31b6-4b47-9bde-7f7bac347df9
+
+[25] synthetic_doc_25.pdf
+  ERROR: Failed to open/parse PDF 'C:\Users\Shrimi Agrawal\privacyshield\testing\GSF\synthetic_doc_25.pdf': Unexpected EOF
+
+[26] synthetic_doc_26.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 1, 'TOTAL': 7}
+  Key: UVpvd2tGR0dDQ3VzUFA0...
+  ✓ Redacted: Brian Carson
+  ✓ Redacted: 895 Hicks Meadows Suite 406
+  ✗ NOT REDACTED: f2b7ec56-efc2-4498-b70f-1538c4be0a97
+
+[27] synthetic_doc_27.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 1, 'NAME': 3, 'ADDRESS': 1, 'TOTAL': 11}
+  Key: dFFDNExTN1JBck51NW4t...
+  ✓ Redacted: Tonya Ward
+  ✗ NOT REDACTED: Unit 6039 Box 6150
+  ✓ Redacted: e3737b6b-44f7-4487-8b21-b7bcb33d1909
+
+[28] synthetic_doc_28.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'PHONE': 1, 'SSN': 1, 'TOTAL': 20}
+  Key: d3RrSE1LVlNOUEdhMG42...
+  ✓ Redacted: Alan Thompson
+  ✓ Redacted: 669-06-0047
+  ✗ NOT REDACTED: TAX-969404
+  ✓ Redacted: 575 Alvarez Greens, Port Kathleenfort, DC 44495
+  ✓ Redacted: 887-430-7713
+  ✓ Redacted: GB07WFOS18622593141833
+  ✗ NOT REDACTED: RF626409
+
+[29] synthetic_doc_29.pdf
+  Stats: {'ORG': 3, 'IBAN': 1, 'NAME': 3, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 1, 'DATE': 2, 'SSN': 1, 'TOTAL': 22}
+  Key: aEhUY3ZCOEJFWEU4TlpP...
+  ✓ Redacted: Julie Rosales
+  ✓ Redacted: 264-74-6310
+  ✗ NOT REDACTED: TAX-704104
+  ✓ Redacted: 7206 April Bypass, Larryport, MH 57879
+  ✓ Redacted: 366-505-1844
+  ✓ Redacted: GB36PDRT24795373813147
+  ✗ NOT REDACTED: RF772692
+
+[30] synthetic_doc_30.pdf
+  Stats: {'ORG': 1, 'NAME': 3, 'DATE': 3, 'AMOUNT': 1, 'ADDRESS': 1, 'TOTAL': 9}
+  Key: QmVKdnc1ME5wLUpuVnBw...
+  ✗ NOT REDACTED: Destiny Joseph
+  ✗ NOT REDACTED: deafac4f-03f6-408e-b7c4-d038e533bff5
+  ✓ Redacted: 0749 Stokes Vista Suite 450, North Angela, OH 43648
+  ✓ Redacted: (293)796-3030
+  ✓ Redacted: Tina Trevino
+
+[31] synthetic_doc_31.pdf
+  Stats: {'NAME': 5, 'DATE': 4, 'DL': 1, 'AMOUNT': 1, 'ORG': 1, 'TOTAL': 12}
+  Key: U3BnSndaX1FwejVpWVZh...
+  ✗ NOT REDACTED: Bryan Briggs
+  ✗ NOT REDACTED: 525242c5-2f55-478e-a235-01d4fff066fe
+  ✓ Redacted: 95666 George Ranch Apt. 699, South Melanie, WV 40183
+  ✓ Redacted: 5908127852
+  ✓ Redacted: Ryan Curry
+
+[32] synthetic_doc_32.pdf
+  Stats: {'DATE': 4, 'ORG': 4, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 15}
+  Key: YUFNaVFOdGJ3cGVpVFZq...
+  ✓ Redacted: Veronica Wu
+  ✓ Redacted: EMP-8066
+  ✗ NOT REDACTED: ID-574119
+
+[33] synthetic_doc_33.pdf
+  ERROR: Failed to open/parse PDF 'C:\Users\Shrimi Agrawal\privacyshield\testing\GSF\synthetic_doc_33.pdf': Unexpected EOF
+
+[34] synthetic_doc_34.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 12}
+  Key: dTcwVkxmTjJMU1RONVk5...
+  ✓ Redacted: Andrew Barron
+  ✓ Redacted: EMP-8709
+  ✗ NOT REDACTED: ID-284156
+
+[35] synthetic_doc_35.pdf
+  Stats: {'ORG': 4, 'IBAN': 1, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 1, 'NAME': 2, 'DATE': 1, 'SSN': 1, 'TOTAL': 21}
+  Key: WmM1SVJGV0RxTFNoSEVT...
+  ✓ Redacted: Mitchell Marshall
+  ✓ Redacted: 783-14-0961
+  ✗ NOT REDACTED: TAX-630057
+  ✓ Redacted: 3137 Williams Motorway, Munozchester, CT 41902
+  ✓ Redacted: 968-345-3403
+  ✓ Redacted: GB57KIIM66544564277127
+  ✗ NOT REDACTED: RF265953
+
+[36] synthetic_doc_36.pdf
+  Stats: {'NRP': 1, 'NAME': 4, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'PHONE': 1, 'DATE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: MllsX2hfS0RiTHJ1WGJX...
+  ✓ Redacted: Michael Miles
+  ✓ Redacted: 308-66-6375
+  ✗ NOT REDACTED: TAX-186041
+  ✓ Redacted: 71865 Mcintyre Drive Suite 639, Lake Jennifer, WV 40130
+  ✓ Redacted: (314)236-9692
+  ✓ Redacted: GB54HYRV03754224996379
+  ✗ NOT REDACTED: RF940047
+
+[37] synthetic_doc_37.pdf
+  Stats: {'NAME': 3, 'ORG': 2, 'DATE': 3, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 11}
+  Key: VE1NTnJBSUZmcWZSRzBm...
+  ✗ NOT REDACTED: Joseph Cohen
+  ✗ NOT REDACTED: 87199a1a-ee0a-4750-85fe-39bc9dfef797
+  ✓ Redacted: 25797 Ferguson Way Suite 163, Clarkland, MD 04862
+  ✓ Redacted: 477-979-7406
+  ✓ Redacted: Edwin Foster
+
+[38] synthetic_doc_38.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ADDRESS': 1, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: dWJGSXk5WlVxZGxuMlBx...
+  ✓ Redacted: Brian Brown
+  ✓ Redacted: EMP-3409
+  ✓ Redacted: ID-692619
+
+[39] synthetic_doc_39.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 11}
+  Key: M0NaVWxXMUstdXdqOEtB...
+  ✓ Redacted: Jennifer Turner
+  ✓ Redacted: EMP-7792
+  ✗ NOT REDACTED: ID-982895
+
+[40] synthetic_doc_40.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 11}
+  Key: cVdvWFlmYmx5emxHZEVh...
+  ✓ Redacted: Stacey Cline
+  ✓ Redacted: EMP-6287
+  ✗ NOT REDACTED: ID-942887
+
+[41] synthetic_doc_41.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 3, 'PHONE': 1, 'TOTAL': 10}
+  Key: cUIzYVVWNW92VlJrTzVX...
+  ✓ Redacted: Rebecca Vaughan
+  ✓ Redacted: 051 Michael Gardens Apt. 579
+  ✗ NOT REDACTED: 1c7588e0-b57f-461f-ae0e-d9fbd6ba3f18
+
+[42] synthetic_doc_42.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 12}
+  Key: R2JReWhrazhlRjRPU0ta...
+  ✓ Redacted: Kristy Guerra
+  ✓ Redacted: EMP-9762
+  ✗ NOT REDACTED: ID-419851
+
+[43] synthetic_doc_43.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 12}
+  Key: X1BxMVp4ZWRwQUFSVGJp...
+  ✓ Redacted: Laura Morrison
+  ✓ Redacted: EMP-8379
+  ✓ Redacted: ID-560921
+
+[44] synthetic_doc_44.pdf
+  Stats: {'ORG': 4, 'NAME': 2, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 10}
+  Key: VGFGZEJ0U3E4ejZhNkFE...
+  ✗ NOT REDACTED: David Ruiz
+  ✗ NOT REDACTED: 364b748a-6d73-4cb0-9f82-b6b8bc6b8a86
+  ✓ Redacted: 30736 Barron Ranch Apt. 256, Williamsmouth, UT 06181
+  ✓ Redacted: (604)328-1351
+  ✓ Redacted: Elizabeth Calhoun
+
+[45] synthetic_doc_45.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 3, 'ADDRESS': 1, 'TOTAL': 10}
+  Key: dUxid21MUGdzM3BRMUs2...
+  ✓ Redacted: Erica Moore
+  ✗ NOT REDACTED: Unit 5671 Box 1944
+  ✗ NOT REDACTED: e3f63bd5-a35f-4583-b20a-1e4fc7048ec0
+
+[46] synthetic_doc_46.pdf
+  ERROR: Failed to open/parse PDF 'C:\Users\Shrimi Agrawal\privacyshield\testing\GSF\synthetic_doc_46.pdf': Unexpected EOF
+
+[47] synthetic_doc_47.pdf
+  Stats: {'NAME': 6, 'DATE': 4, 'DL': 1, 'AMOUNT': 1, 'PHONE': 1, 'ORG': 1, 'TOTAL': 14}
+  Key: WTg2eGlLYUg5MGxfUU1H...
+  ✗ NOT REDACTED: Emily Schroeder
+  ✗ NOT REDACTED: b5146333-10c5-4c0d-bd2f-006267d8285d
+  ✓ Redacted: 8937 Ashley Walk Apt. 856, Valerieside, AK 78879
+  ✓ Redacted: 479-790-5483
+  ✓ Redacted: Sharon Morgan
+
+[48] synthetic_doc_48.pdf
+  Stats: {'ORG': 3, 'NAME': 3, 'DATE': 3, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 11}
+  Key: Vkc0ak05R0JPWDV2YWlE...
+  ✗ NOT REDACTED: Heidi Reeves
+  ✗ NOT REDACTED: 91b9a177-2c31-4a66-bb63-ce0f4a865307
+  ✓ Redacted: 93495 Stevens Streets Apt. 514, Harrisbury, MP 36274
+  ✓ Redacted: 685-720-3281
+  ✓ Redacted: Amy Cole
+
+[49] synthetic_doc_49.pdf
+  Stats: {'DATE': 3, 'ORG': 3, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 9}
+  Key: Uzc1ZEFpaVVmazBEcUVy...
+  ✓ Redacted: Matthew Stanley
+  ✗ NOT REDACTED: 155 Tammy Haven
+  ✗ NOT REDACTED: a39a2d01-90fa-41c1-8687-f68c1d06cfbc
+
+[50] synthetic_doc_50.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 2, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 1, 'DATE': 1, 'SSN': 1, 'TOTAL': 21}
+  Key: djI3SXlMM01BdGJUTm8z...
+  ✓ Redacted: Casey Mercado
+  ✓ Redacted: 630-06-6803
+  ✗ NOT REDACTED: TAX-777498
+  ✓ Redacted: 0679 Harper Mews, East David, MN 29265
+  ✓ Redacted: 6068573549
+  ✓ Redacted: GB85RKSS03742054996291
+  ✗ NOT REDACTED: RF733383
+
+[51] synthetic_doc_51.pdf
+  Stats: {'NRP': 1, 'NAME': 6, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'PHONE': 2, 'DATE': 1, 'SSN': 1, 'TOTAL': 25}
+  Key: YWI4T1pmdUM3TXRGd3dr...
+  ✓ Redacted: Michaela Gonzales
+  ✓ Redacted: 407-56-1713
+  ✓ Redacted: TAX-336092
+  ✓ Redacted: 67323 Jessica Springs, Bowmanborough, SD 20703
+  ✓ Redacted: (729)579-6796
+  ✓ Redacted: GB87UWAX07609784510272
+  ✓ Redacted: RF394322
+
+[52] synthetic_doc_52.pdf
+  Stats: {'DATE': 2, 'ORG': 4, 'AMOUNT': 1, 'NAME': 1, 'TOTAL': 8}
+  Key: Qld0bG1pZ2hqbmtJVU0z...
+  ✓ Redacted: Morgan Ward DVM
+  ✗ NOT REDACTED: 8291 Miller Stream
+  ✗ NOT REDACTED: 292b6aec-2533-4698-9ef3-b0f0480caf1d
+
+[53] synthetic_doc_53.pdf
+  Stats: {'NRP': 1, 'ORG': 4, 'IBAN': 1, 'NAME': 3, 'AMOUNT': 10, 'PHONE': 1, 'DATE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: STdRdGFfdGVWZTJaei12...
+  ✓ Redacted: Kathleen Hayes
+  ✓ Redacted: 355-19-2616
+  ✗ NOT REDACTED: TAX-771936
+  ✓ Redacted: 196 Cook Mission Apt. 739, Lake Timothy, MS 53363
+  ✓ Redacted: 293-705-7833
+  ✓ Redacted: GB02XQLS16250451908225
+  ✗ NOT REDACTED: RF950225
+
+[54] synthetic_doc_54.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 2, 'AMOUNT': 10, 'PHONE': 2, 'ADDRESS': 1, 'DATE': 1, 'SSN': 1, 'TOTAL': 22}
+  Key: MF9qMDJ2Q2ktUkRBUi1j...
+  ✓ Redacted: Kim Snyder
+  ✓ Redacted: 661-15-1779
+  ✗ NOT REDACTED: TAX-127848
+  ✓ Redacted: 3515 Mendoza Plain, Larsonton, KY 16934
+  ✓ Redacted: 2092048782
+  ✓ Redacted: GB98UTNN33415080697620
+  ✗ NOT REDACTED: RF502747
+
+[55] synthetic_doc_55.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: VTNzSld4OXBUcG84c3hW...
+  ✓ Redacted: Joseph Hicks
+  ✓ Redacted: EMP-6799
+  ✗ NOT REDACTED: ID-294115
+
+[56] synthetic_doc_56.pdf
+  Stats: {'DATE': 3, 'ORG': 3, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 10}
+  Key: X21WYmhSNy1lQmU1QmZ6...
+  ✓ Redacted: Kaitlyn Ortiz
+  ✓ Redacted: 877 Diana Mill Suite 925
+  ✗ NOT REDACTED: 18ed8005-256b-4f67-8a02-186b2dfdd236
+
+[57] synthetic_doc_57.pdf
+  Stats: {'DATE': 3, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 4, 'TOTAL': 13}
+  Key: NXZZSW1kcDY3TGd6Vkxn...
+  ✓ Redacted: Mandy Craig
+  ✓ Redacted: EMP-6162
+  ✗ NOT REDACTED: ID-573776
+
+[58] synthetic_doc_58.pdf
+  Stats: {'DATE': 3, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 11}
+  Key: bEdBdGhsbUc2WVpqUHJ1...
+  ✓ Redacted: Robert Walker
+  ✓ Redacted: EMP-1788
+  ✗ NOT REDACTED: ID-994450
+
+[59] synthetic_doc_59.pdf
+  Stats: {'ORG': 1, 'NAME': 3, 'DATE': 5, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 11}
+  Key: OVQ3NTZzeDZZTnYwcVI3...
+  ✗ NOT REDACTED: Becky Gomez
+  ✗ NOT REDACTED: 6609fecf-fdd8-4dea-aec6-4c3cb04364ee
+  ✓ Redacted: 9017 George Track Suite 777, West Todd, CT 48098
+  ✓ Redacted: (272)713-0393
+  ✓ Redacted: Ricky Contreras
+
+[60] synthetic_doc_60.pdf
+  Stats: {'NRP': 1, 'ORG': 3, 'IBAN': 1, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 1, 'DATE': 1, 'SSN': 1, 'NAME': 1, 'TOTAL': 20}
+  Key: YkZUcWo1Y3VtbUg3Rlpp...
+  ✓ Redacted: John Brown
+  ✓ Redacted: 290-44-3434
+  ✗ NOT REDACTED: TAX-654558
+  ✓ Redacted: 186 Davis Islands, Belindaland, OR 39016
+  ✓ Redacted: (249)333-5631
+  ✓ Redacted: GB56LFDF20661992574119
+  ✗ NOT REDACTED: RF268252
+
+[61] synthetic_doc_61.pdf
+  Stats: {'ORG': 2, 'NAME': 2, 'DL': 1, 'DATE': 3, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 10}
+  Key: ckZHa2lTd0s4VG5fWFlG...
+  ✗ NOT REDACTED: Jacqueline Price
+  ✗ NOT REDACTED: 227d6c80-c694-4a61-95cc-374cfefb15cc
+  ✓ Redacted: 01657 Jonathan Extensions, Calebfurt, FM 56729
+  ✓ Redacted: (819)300-2235
+  ✓ Redacted: Christine Santana
+
+[62] synthetic_doc_62.pdf
+  Stats: {'NAME': 5, 'ORG': 2, 'DATE': 2, 'AMOUNT': 1, 'UK_NHS': 1, 'TOTAL': 11}
+  Key: QUIxWUhaSGRKbW1Sb0do...
+  ✗ NOT REDACTED: Joseph Garcia
+  ✗ NOT REDACTED: 3ce2c507-5f2c-460b-add4-f68d9c5a1a23
+  ✓ Redacted: 987 Kimberly Causeway, Port Sheila, NY 48524
+  ✓ Redacted: 851-631-1155
+  ✓ Redacted: Aaron Jackson
+
+[63] synthetic_doc_63.pdf
+  Stats: {'NRP': 1, 'ORG': 5, 'IBAN': 1, 'AMOUNT': 10, 'PHONE': 1, 'ADDRESS': 2, 'NAME': 2, 'DATE': 1, 'SSN': 1, 'TOTAL': 24}
+  Key: Si12d2t2VGh1LWdwYnRZ...
+  ✓ Redacted: Kim Bailey
+  ✓ Redacted: 062-42-2960
+  ✓ Redacted: TAX-533744
+  ✓ Redacted: 76593 Sara Square, New Rebecca, PA 77867
+  ✓ Redacted: 7155202008
+  ✓ Redacted: GB62OSKR54286314571336
+  ✗ NOT REDACTED: RF895586
+
+[64] synthetic_doc_64.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 1, 'NAME': 4, 'TOTAL': 10}
+  Key: NnhZbkZLV3BJTzJsUm1a...
+  ✓ Redacted: Raven Bonilla
+  ✓ Redacted: 99033 Willis Light
+  ✗ NOT REDACTED: 3014dd13-06ce-4094-9e5f-1c16c8e1bca4
+
+[65] synthetic_doc_65.pdf
+  Stats: {'NAME': 4, 'ORG': 3, 'DATE': 2, 'AMOUNT': 1, 'ADDRESS': 1, 'TOTAL': 11}
+  Key: ZHFaQk95akoxRjI2Mnlv...
+  ✗ NOT REDACTED: Donna Stewart
+  ✗ NOT REDACTED: 04c90143-7da3-43d1-b69a-5fd1649e0aa9
+  ✓ Redacted: 57611 Bennett Junction, East Rebeccaport, MN 86344
+  ✓ Redacted: 7877022630
+  ✓ Redacted: Danielle Payne
+
+[66] synthetic_doc_66.pdf
+  Stats: {'ORG': 2, 'NAME': 2, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 8}
+  Key: Nnc4UER4aGc4ei0xU29N...
+  ✗ NOT REDACTED: Matthew Turner
+  ✗ NOT REDACTED: 75008e55-af25-4d0e-9917-ceed97c7e219
+  ✓ Redacted: Unit 3465 Box 5551, DPO AE 69426
+  ✓ Redacted: 202-330-5765
+  ✓ Redacted: Tracey Cline
+
+[67] synthetic_doc_67.pdf
+  Stats: {'NAME': 5, 'DATE': 5, 'AMOUNT': 1, 'PHONE': 1, 'ORG': 1, 'TOTAL': 13}
+  Key: QVlpRExmMUVCdWNwcWRt...
+  ✗ NOT REDACTED: Adam Navarro
+  ✗ NOT REDACTED: 3fe74e26-99ab-4fbd-929e-65ee5dbd1dfd
+  ✓ Redacted: 1479 Carolyn Brooks Apt. 871, West Brittany, AZ 04152
+  ✓ Redacted: 426-761-9307
+  ✓ Redacted: William Valdez
+
+[68] synthetic_doc_68.pdf
+  Stats: {'NRP': 1, 'ORG': 3, 'IBAN': 1, 'AMOUNT': 10, 'UK_NHS': 1, 'DATE': 2, 'NAME': 3, 'SSN': 1, 'TOTAL': 22}
+  Key: QUpQTEpQRDlxaTQtMWpD...
+  ✓ Redacted: Hannah Snyder
+  ✓ Redacted: 405-84-3066
+  ✗ NOT REDACTED: TAX-356417
+  ✓ Redacted: 26363 Beck Glen Apt. 457, North Kenneth, AZ 83440
+  ✓ Redacted: 5487396159
+  ✓ Redacted: GB92BOAP35416338382760
+  ✗ NOT REDACTED: RF338594
+
+[69] synthetic_doc_69.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 8}
+  Key: X3Zhckw5V3FYSHJ0Njk4...
+  ✓ Redacted: Kevin Franco
+  ✗ NOT REDACTED: USS Flores
+  ✗ NOT REDACTED: ee3064a7-75aa-4a66-a93d-e6ab20d8686a
+
+[70] synthetic_doc_70.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 10}
+  Key: S2cwT1czZVdwRGNEaGdV...
+  ✓ Redacted: John Fleming
+  ✗ NOT REDACTED: 2965 Huerta Ramp
+  ✗ NOT REDACTED: dbd80b11-4262-42fa-8730-9046bcd4ccc5
+
+[71] synthetic_doc_71.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 10}
+  Key: WWFSNUNmUjVmbkI2YnMw...
+  ✓ Redacted: Charles Jackson
+  ✓ Redacted: EMP-8776
+  ✗ NOT REDACTED: ID-160885
+
+[72] synthetic_doc_72.pdf
+  Stats: {'ORG': 3, 'NAME': 2, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'TOTAL': 9}
+  Key: eGhKdkk1SmNsN042bk14...
+  ✗ NOT REDACTED: Abigail Stuart
+  ✗ NOT REDACTED: 146b9f6e-e3ac-4dd8-83a5-cb2be897e9b1
+  ✓ Redacted: 7667 Richard Ports Suite 012, Beverlyville, FM 31583
+  ✓ Redacted: (636)564-7569
+  ✓ Redacted: Patrick Ingram
+
+[73] synthetic_doc_73.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 13}
+  Key: WkpJWmdieUNlRzRjeGhW...
+  ✓ Redacted: Megan Perez
+  ✓ Redacted: EMP-2371
+  ✗ NOT REDACTED: ID-471118
+
+[74] synthetic_doc_74.pdf
+  Stats: {'DATE': 3, 'ORG': 5, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 11}
+  Key: aFBzdWh2OFZLYUw2WkRT...
+  ✓ Redacted: Samuel Johnson
+  ✓ Redacted: 0194 Medina Lodge Suite 204
+  ✗ NOT REDACTED: a00cc684-ab8d-4825-9f49-36c59aac64ab
+
+[75] synthetic_doc_75.pdf
+  Stats: {'DATE': 3, 'ORG': 3, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: RFNQZ0NRbU5GQmRHaVNi...
+  ✓ Redacted: Eric Taylor
+  ✓ Redacted: EMP-8914
+  ✗ NOT REDACTED: ID-689719
+
+[76] synthetic_doc_76.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'PHONE': 1, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: Y1c1aVZoQU9helByek5Q...
+  ✓ Redacted: Carrie Lutz
+  ✓ Redacted: EMP-4590
+  ✓ Redacted: ID-333977
+
+[77] synthetic_doc_77.pdf
+  Stats: {'NAME': 5, 'DATE': 2, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 10}
+  Key: cnZiRTB4aGJJTWVTTE1w...
+  ✗ NOT REDACTED: Mrs. Sherri Gardner DVM
+  ✗ NOT REDACTED: 169a6c50-c50d-4046-82b4-acfc3b7d2aee
+  ✓ Redacted: 7852 Anderson Loaf, Simsbury, ME 64500
+  ✓ Redacted: 6325349011
+  ✓ Redacted: Kevin Ballard
+
+[78] synthetic_doc_78.pdf
+  Stats: {'DATE': 6, 'ORG': 2, 'AMOUNT': 1, 'NAME': 2, 'ADDRESS': 1, 'TOTAL': 12}
+  Key: SWJOVWJVcHZBSlpHME05...
+  ✓ Redacted: Rachel Brown
+  ✗ NOT REDACTED: 104 Russell Station
+  ✓ Redacted: 8730b0ba-f5ee-4f17-8701-5acd1e9b1f29
+
+[79] synthetic_doc_79.pdf
+  Stats: {'DATE': 3, 'ORG': 3, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 13}
+  Key: aXlGdFotRWtaOXFHTXFB...
+  ✓ Redacted: Joshua Evans
+  ✓ Redacted: EMP-6923
+  ✗ NOT REDACTED: ID-314470
+
+[80] synthetic_doc_80.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 1, 'NAME': 4, 'TOTAL': 8}
+  Key: VTI2ajdhbEl3QldzMDlN...
+  ✓ Redacted: Brett Vaughn
+  ✗ NOT REDACTED: 4909 Colleen Corners
+  ✗ NOT REDACTED: 7d3b4b71-bcd0-4a8c-9ba8-5eb667466320
+
+[81] synthetic_doc_81.pdf
+  Stats: {'DATE': 4, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: Qkt0RlJLcXFtR3pNMFdv...
+  ✓ Redacted: Elizabeth Smith
+  ✓ Redacted: EMP-8596
+  ✓ Redacted: ID-193726
+
+[82] synthetic_doc_82.pdf
+  Stats: {'ORG': 3, 'IBAN': 1, 'AMOUNT': 10, 'DATE': 2, 'NAME': 3, 'SSN': 1, 'TOTAL': 20}
+  Key: Q1p5cmRWUUc0dVpQc25l...
+  ✓ Redacted: Jessica Brown
+  ✓ Redacted: 622-47-8837
+  ✗ NOT REDACTED: TAX-786901
+  ✓ Redacted: 173 Cooley Walks, Jordanview, ME 67996
+  ✓ Redacted: 4373661091
+  ✓ Redacted: GB93TORF55000069848578
+  ✗ NOT REDACTED: RF745306
+
+[83] synthetic_doc_83.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ADDRESS': 1, 'ID': 1, 'NAME': 1, 'TOTAL': 12}
+  Key: SE9ISVlrTklkNXRIMFlJ...
+  ✓ Redacted: James Goodman
+  ✓ Redacted: EMP-6947
+  ✓ Redacted: ID-481001
+
+[84] synthetic_doc_84.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 12}
+  Key: WXRBN2k4OTVvMzU5OURD...
+  ✓ Redacted: Aaron Holmes
+  ✓ Redacted: EMP-2454
+  ✗ NOT REDACTED: ID-876169
+
+[85] synthetic_doc_85.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 11}
+  Key: VUhWSzVXd3VVRmhMMkJ0...
+  ✓ Redacted: Megan Morrow
+  ✓ Redacted: EMP-1285
+  ✗ NOT REDACTED: ID-904870
+
+[86] synthetic_doc_86.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'NAME': 2, 'ID': 1, 'TOTAL': 12}
+  Key: LVlvYlhyX2dRUURPcHJr...
+  ✓ Redacted: Rachel Knox
+  ✓ Redacted: EMP-7125
+  ✗ NOT REDACTED: ID-674944
+
+[87] synthetic_doc_87.pdf
+  Stats: {'DATE': 3, 'ORG': 5, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 11}
+  Key: NWZrRDNaZ1RjUWtjSnJk...
+  ✓ Redacted: Joanna Robinson
+  ✓ Redacted: 220 Figueroa Ford Suite 349
+  ✗ NOT REDACTED: 2f1f688f-3965-4111-ad2f-4b9a378fe169
+
+[88] synthetic_doc_88.pdf
+  Stats: {'NRP': 1, 'NAME': 3, 'IBAN': 1, 'ORG': 3, 'AMOUNT': 10, 'PHONE': 1, 'SSN': 1, 'TOTAL': 20}
+  Key: eUhBb3pfMV82WktrUjk1...
+  ✓ Redacted: Donald Holloway
+  ✓ Redacted: 098-36-0160
+  ✗ NOT REDACTED: TAX-494413
+  ✓ Redacted: 393 Stacy Manor, Donaldmouth, TN 68185
+  ✓ Redacted: (214)866-3662
+  ✓ Redacted: GB35JMRU12178609105499
+  ✗ NOT REDACTED: RF597438
+
+[89] synthetic_doc_89.pdf
+  Stats: {'DATE': 2, 'ORG': 3, 'AMOUNT': 1, 'NAME': 2, 'TOTAL': 8}
+  Key: czdhVWduWl83SExWQjRM...
+  ✓ Redacted: Kara Tran
+  ✗ NOT REDACTED: 689 Meadows Mall
+  ✗ NOT REDACTED: 93980625-adfb-48b7-b854-db5976d79540
+
+[90] synthetic_doc_90.pdf
+  Stats: {'DATE': 3, 'ORG': 1, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 8}
+  Key: QjM3dTR5TXZmS29Dejhn...
+  ✓ Redacted: Katherine Massey
+  ✗ NOT REDACTED: 6924 Corey Groves
+  ✗ NOT REDACTED: 90356eca-5d80-4592-8204-e3cb9ad60e1f
+
+[91] synthetic_doc_91.pdf
+  Stats: {'DATE': 3, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 11}
+  Key: NEl6d2Z5UjhfZUFqTlk1...
+  ✓ Redacted: Brittany Reed
+  ✓ Redacted: EMP-8556
+  ✗ NOT REDACTED: ID-182368
+
+[92] synthetic_doc_92.pdf
+  Stats: {'DATE': 3, 'ORG': 2, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 12}
+  Key: czFaQ29meWNlMzhBN21M...
+  ✓ Redacted: Katherine Jackson
+  ✓ Redacted: EMP-8777
+  ✗ NOT REDACTED: ID-219356
+
+[93] synthetic_doc_93.pdf
+  Stats: {'DATE': 4, 'ORG': 3, 'AMOUNT': 1, 'NAME': 3, 'TOTAL': 11}
+  Key: YVF4Rkd1RGN0LTlRWEtG...
+  ✓ Redacted: Renee Bishop
+  ✓ Redacted: 2009 Chapman Forest Suite 358
+  ✓ Redacted: 13e7355e-0ab0-4ec7-84e4-1e518fc5cdba
+
+[94] synthetic_doc_94.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 10}
+  Key: MjZVQmlEUkpyR1MtUVZx...
+  ✓ Redacted: Laura Martinez
+  ✓ Redacted: EMP-2357
+  ✗ NOT REDACTED: ID-628864
+
+[95] synthetic_doc_95.pdf
+  Stats: {'NAME': 3, 'DATE': 3, 'AMOUNT': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 9}
+  Key: ME5NdWRwVzIxVWF2a1Fw...
+  ✗ NOT REDACTED: Jacob Soto
+  ✗ NOT REDACTED: b12644e9-86bf-46eb-8314-c8713481ab77
+  ✓ Redacted: 044 Katrina Via, Lake Kylechester, VT 19666
+  ✓ Redacted: (482)668-3048
+  ✓ Redacted: Kendra Lamb
+
+[96] synthetic_doc_96.pdf
+  Stats: {'DATE': 4, 'ORG': 1, 'AMOUNT': 4, 'NRP': 1, 'ID': 1, 'NAME': 2, 'TOTAL': 13}
+  Key: ZlUzdkFPcW56ZWFpX1hM...
+  ✓ Redacted: Mary Rich
+  ✓ Redacted: EMP-9102
+  ✓ Redacted: ID-110322
+
+[97] synthetic_doc_97.pdf
+  Stats: {'NRP': 1, 'ORG': 4, 'IBAN': 1, 'AMOUNT': 10, 'DATE': 4, 'SSN': 1, 'NAME': 1, 'TOTAL': 22}
+  Key: d1Y1Y2w2SV9kb0FEeUwy...
+  ✓ Redacted: Michael Martin
+  ✓ Redacted: 593-12-8487
+  ✗ NOT REDACTED: TAX-412511
+  ✓ Redacted: 4457 Elizabeth Wall, Larabury, OR 51925
+  ✓ Redacted: 8595972765
+  ✓ Redacted: GB77UBVZ59253530018704
+  ✗ NOT REDACTED: RF295558
+
+[98] synthetic_doc_98.pdf
+  Stats: {'DATE': 3, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 2, 'TOTAL': 11}
+  Key: bnVKZjhZZGpDT2ZWSzdr...
+  ✓ Redacted: Sarah Khan
+  ✓ Redacted: EMP-2903
+  ✗ NOT REDACTED: ID-350442
+
+[99] synthetic_doc_99.pdf
+  Stats: {'ORG': 3, 'NAME': 3, 'DATE': 5, 'AMOUNT': 1, 'DL': 1, 'PHONE': 1, 'ADDRESS': 1, 'TOTAL': 15}
+  Key: OEd3WC14YTBid2NrNnA4...
+  ✗ NOT REDACTED: Danny Brady
+  ✗ NOT REDACTED: 9975fe9d-e846-4e18-ba6a-7117606becc6
+  ✓ Redacted: 7743 Perez Circle Apt. 472, Lake Zacharyland, PW 56061
+  ✓ Redacted: (720)503-7788
+  ✓ Redacted: William Williams
+
+[100] synthetic_doc_100.pdf
+  Stats: {'DATE': 2, 'ORG': 1, 'AMOUNT': 4, 'ID': 1, 'NAME': 1, 'TOTAL': 9}
+  Key: aThZSWJCWUJZa0wwRGJR...
+  ✗ NOT REDACTED: Justin May
+  ✓ Redacted: EMP-7468
+  ✗ NOT REDACTED: ID-138131
+
+==================================================
+TOTAL: 278 redacted ✓  |  143 missed ✗
+Redaction rate: 66.0%
