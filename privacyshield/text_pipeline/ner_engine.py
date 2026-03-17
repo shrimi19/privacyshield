@@ -52,12 +52,10 @@ def validate_iban(iban):
     return int(numeric) % 97 == 1
 
 # ─── CONTEXT-BASED NUMBER DETECTOR ───────────────────────────────────────────
-# Detects any value following label words like "number", "no.", "#", "id"
-# This catches policy numbers, invoice numbers, claim numbers of ANY format
 
 GENERIC_NUMBER_LABELS = [
     "number", "no.", "no:", "#", "num.", "num:", "id:", "id no",
-    "nummer", "numéro", "numero", "número",  # multilingual
+    "nummer", "numéro", "numero", "número",
     "policy number", "policy no", "policy #",
     "invoice number", "invoice no", "invoice #",
     "claim number", "claim no", "claim #",
@@ -81,20 +79,56 @@ def _extract_context_numbers(text):
     Extract values that follow label words like 'policy number', 'invoice #' etc.
     Returns list of (start, end, value) tuples.
     """
-    import re
     found = []
     text_lower = text.lower()
 
     for label in GENERIC_NUMBER_LABELS:
         pattern = re.escape(label) + r"[\s:]*([A-Z0-9][A-Z0-9\-\/\.]{2,30})"
         for m in re.finditer(pattern, text_lower):
-            # Get actual case from original text
             actual_start = m.start(1)
             actual_end = m.end(1)
             actual_value = text[actual_start:actual_end]
             found.append((actual_start, actual_end, actual_value))
 
     return found
+
+# ─── ADDRESS EXTRACTOR ────────────────────────────────────────────────────────
+
+# Regex to capture full address lines that follow an address label
+ADDRESS_LABEL_RE = re.compile(
+    r"(?i)(?:address|addr|mailing\s+address|home\s+address|street\s+address|"
+    r"residence|residential\s+address|adresse|anschrift|indirizzo|dirección)"
+    r"\s*[:\-]?\s*"
+    r"([A-Za-z0-9\s,\.\-\#\/]{10,150}?)(?=\n|$)"
+)
+
+def _extract_address_entities(text, existing_entities):
+    """
+    Extract full addresses that spaCy may have missed or only partially captured.
+    Matches patterns like 'Address: 123 Main St, Springfield, IL 62701'
+    and ensures the full string is tagged as LOCATION.
+    """
+    extra = []
+    for m in ADDRESS_LABEL_RE.finditer(text):
+        start = m.start(1)
+        end = m.end(1)
+        value = m.group(1).strip()
+        if len(value) < 8:
+            continue
+        # Only add if this span is not already fully covered by an existing entity
+        already = any(
+            e["start"] <= start and end <= e["end"]
+            for e in existing_entities
+        )
+        if not already:
+            extra.append({
+                "entity_type": "LOCATION",
+                "text": value,
+                "start": start,
+                "end": end,
+                "score": 0.9
+            })
+    return extra
 
 # ─── CUSTOM RECOGNIZERS ───────────────────────────────────────────────────────
 
@@ -109,6 +143,9 @@ def _build_custom_recognizers():
         context=["ssn","social","security"]))
 
     # Financial amounts — all languages
+    # NOTE: FINANCIAL_AMOUNT entities are intentionally NOT redacted.
+    # They are detected only to prevent the numbers inside them from being
+    # misidentified as dates, IDs, or other PII by other recognizers.
     for lang in ALL_LANGUAGES:
         recognizers.append(PatternRecognizer(supported_entity="FINANCIAL_AMOUNT",
             supported_language=lang,
@@ -116,6 +153,8 @@ def _build_custom_recognizers():
                 Pattern("usd",   r"\$\s?[\d,]+(?:\.\d{2})?", 0.7),
                 Pattern("chf",   r"CHF\s?[\d,]+(?:\.\d{2})?", 0.8),
                 Pattern("eur",   r"EUR\s?[\d,]+(?:\.\d{2})?", 0.7),
+                Pattern("gbp",   r"£\s?[\d,]+(?:\.\d{2})?", 0.7),
+                Pattern("inr",   r"₹\s?[\d,]+(?:\.\d{2})?", 0.7),
                 Pattern("usd_m", r"\$\s?[\d,]+/month", 0.8),
             ],
             context=["salary","income","wage","pay","benefit","amount","due",
@@ -261,10 +300,50 @@ def auto_detect_document_type(text):
 
 def _remove_false_positives(entities, text, document_type):
     email_spans = [(e["start"], e["end"]) for e in entities if e["entity_type"] == "EMAIL_ADDRESS"]
+
+    # ── FIX 1: Pre-compute all currency-prefixed number spans ──────────────────
+    # Numbers like $50,000 / CHF 1,200 / £300 must never be redacted.
+    # We build a list of (start, end) spans that are "protected" from redaction.
+    currency_spans = [
+        (m.start(), m.end())
+        for m in re.finditer(
+            r'(?:[\$€£¥₹]|CHF|EUR|USD|GBP|INR)\s?[\d,]+(?:\.\d+)?(?:/\w+)?',
+            text
+        )
+    ]
+
     filtered = []
     for entity in entities:
         t = entity["text"].strip()
         et = entity["entity_type"]
+
+        # ── FIX 1: Never redact financial amounts ──────────────────────────────
+        # FINANCIAL_AMOUNT entities (salaries, income, premiums) should be visible.
+        if et == "FINANCIAL_AMOUNT":
+            continue
+
+        # ── FIX 1: Skip any entity whose span falls inside a currency expression ─
+        # This prevents "$50,000" from having "50,000" redacted as DATE_TIME/NRP.
+        if et in ("DATE_TIME", "NRP", "ID_NUMBER", "NUMBER", "LOCATION") and any(
+            cs <= entity["start"] and entity["end"] <= ce
+            for cs, ce in currency_spans
+        ):
+            continue
+
+        # ── FIX 3: Skip age values ─────────────────────────────────────────────
+        # "Age: 34" or "age 34" — the number should not be redacted.
+        if et in ("DATE_TIME", "NRP", "ID_NUMBER", "NUMBER"):
+            # Check up to 15 characters before this entity for the word "age"
+            preceding = text[max(0, entity["start"] - 15):entity["start"]].lower()
+            if re.search(r'\bage\b', preceding):
+                continue
+
+        # ── FIX 3: Skip pure short numeric strings mis-tagged as DATE_TIME ──────
+        # e.g. "34" on its own shouldn't be redacted as a date
+        if et == "DATE_TIME" and re.fullmatch(r'\d{1,3}', t.strip()):
+            continue
+
+        # ── Existing filters ───────────────────────────────────────────────────
         if et == "SWIFT_BIC" and (t in SWIFT_FALSE_POSITIVES or not t.isupper()):
             continue
         if et == "PERSON" and t in PERSON_FALSE_POSITIVES:
@@ -276,7 +355,7 @@ def _remove_false_positives(entities, text, document_type):
         # Never redact organizations/company names
         if et == "ORGANIZATION":
             continue
-        if et in ("PERSON","LOCATION") and t in ORG_FALSE_POSITIVES:
+        if et in ("PERSON", "LOCATION") and t in ORG_FALSE_POSITIVES:
             continue
         if et == "URL" and any(s <= entity["start"] and entity["end"] <= e for s, e in email_spans):
             continue
@@ -285,12 +364,14 @@ def _remove_false_positives(entities, text, document_type):
         # Filter "30 days", "7 days", "24 hours" etc — durations not dates
         if et == "DATE_TIME" and any(
             t.lower().endswith(unit)
-            for unit in [" days", " day", " hours", " hour", " weeks", " week", " months", " month", " years", " year"]
+            for unit in [" days", " day", " hours", " hour", " weeks", " week",
+                         " months", " month", " years", " year"]
         ):
             continue
         # Filter short pure numbers detected as dates
         if et == "DATE_TIME" and t.strip().isdigit() and len(t.strip()) <= 2:
             continue
+
         filtered.append(entity)
     return filtered
 
@@ -343,7 +424,6 @@ def detect_pii(text, language="auto", document_type="auto"):
             context_numbers = _extract_context_numbers(line)
             existing_spans = {(e["start"] - offset, e["end"] - offset) for e in all_entities if e["start"] >= offset}
             for (start, end, value) in context_numbers:
-                # Only add if not already covered by another entity
                 if (start, end) not in existing_spans:
                     all_entities.append({
                         "entity_type": "ID_NUMBER",
@@ -354,6 +434,13 @@ def detect_pii(text, language="auto", document_type="auto"):
                     })
 
         offset += len(line) + 1  # +1 for newline
+
+    # ── FIX 2: Extract full addresses via label-based regex ───────────────────
+    # spaCy often only captures fragments of addresses (e.g., just the city or
+    # just the street name). This step finds the full address string after a
+    # label like "Address:", "Home Address:", "Adresse:" etc. and tags the
+    # entire value as LOCATION so it gets fully redacted.
+    all_entities += _extract_address_entities(text, all_entities)
 
     # Extract names from label patterns missed by spaCy
     # e.g. "Insured Name: Amanda Coleman", "Taxpayer Name: Tyler Moore"
@@ -366,7 +453,6 @@ def detect_pii(text, language="auto", document_type="auto"):
     for m in name_label_re.finditer(text):
         start = m.start(1)
         end = m.end(1)
-        # Only add if not already covered
         already = any(e["start"] <= start and end <= e["end"] for e in all_entities)
         if not already:
             all_entities.append({
