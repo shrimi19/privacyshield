@@ -201,16 +201,26 @@
     .progress-wrap { display: none; margin-top: .8rem; }
     .progress-wrap.visible { display: block; }
     .progress-bar {
-      height: 6px;
-      border-radius: 3px;
+      height: 12px;
+      border-radius: 6px;
       background: var(--border);
       overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     }
     .fill {
       height: 100%;
       width: 0%;
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--accent), var(--accent-h));
       transition: width .25s;
+      box-shadow: 0 0 10px rgba(77, 156, 255, 0.5);
+    }
+    .fill.processing {
+      animation: processingBar 1.5s ease-in-out infinite;
+    }
+    @keyframes processingBar {
+      0% { width: 30%; }
+      50% { width: 90%; }
+      100% { width: 30%; }
     }
     .progress-label {
       margin-top: .35rem;
@@ -243,13 +253,23 @@
     }
     .key-line {
       font-family: Consolas, monospace;
-      font-size: .8rem;
+      font-size: 0;
       line-height: 1.45;
       background: #0e131c;
       border: 1px solid #2c394d;
       padding: .6rem;
       border-radius: 6px;
       word-break: break-all;
+      user-select: all;
+      position: relative;
+      min-height: 1.5rem;
+    }
+    .key-line::after {
+      content: '•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••';
+      font-size: .8rem;
+      color: var(--text-dim);
+      pointer-events: none;
+      display: block;
     }
     .key-hint {
       margin-top: .45rem;
@@ -456,6 +476,7 @@
   let selectedFile = null;
   let originalBlobUrl = null;
   let restoreInputBlobUrl = null;
+  const ACTIVE_TAB_STORAGE_KEY = 'privacyshield-active-tab';
 
   const formatBytes = (b) => {
     if (b < 1024) return b + ' B';
@@ -471,6 +492,16 @@
     panelDecrypt.classList.toggle('active', !onRedact);
     tabRedact.setAttribute('aria-selected', onRedact ? 'true' : 'false');
     tabDecrypt.setAttribute('aria-selected', onRedact ? 'false' : 'true');
+  };
+
+  const getStoredActiveTab = () => {
+    const storedTab = sessionStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
+    return storedTab === 'decrypt' ? 'decrypt' : 'redact';
+  };
+
+  const refreshIntoTab = (tabName) => {
+    sessionStorage.setItem(ACTIVE_TAB_STORAGE_KEY, tabName);
+    window.location.reload();
   };
 
   const updateRestoreButtonState = () => {
@@ -505,8 +536,14 @@
     updateRestoreButtonState();
   };
 
-  tabRedact.addEventListener('click', () => setActiveTab('redact'));
-  tabDecrypt.addEventListener('click', () => setActiveTab('decrypt'));
+  setActiveTab(getStoredActiveTab());
+
+  tabRedact.addEventListener('click', () => {
+    refreshIntoTab('redact');
+  });
+  tabDecrypt.addEventListener('click', () => {
+    refreshIntoTab('decrypt');
+  });
 
   const reset = () => {
     selectedFile = null;
@@ -574,8 +611,11 @@
     if (!keyValue) return;
     try {
       await navigator.clipboard.writeText(keyValue);
-      status.textContent = 'Recovery key copied to clipboard.';
-      status.className = 'status success';
+      const popup = document.createElement('div');
+      popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#3ad29f;color:#fff;padding:1.2rem 1.8rem;border-radius:12px;font-size:1.1rem;font-weight:700;z-index:9999;box-shadow:0 10px 40px rgba(0,0,0,0.6);';
+      popup.textContent = 'Recovery key copied to clipboard';
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 2500);
     } catch (_err) {
       status.textContent = 'Could not copy key automatically. Please copy it manually.';
       status.className = 'status error';
@@ -602,22 +642,52 @@
 
     try {
       const xhr = new XMLHttpRequest();
-      xhr.upload.addEventListener('progress', (e) => {
-        if (!e.lengthComputable) return;
-        const pct = Math.round((e.loaded / e.total) * 100);
-        progressFill.style.width = pct + '%';
-        progressLabel.textContent = `Uploading... ${pct}%`;
-      });
 
       const response = await new Promise((resolve, reject) => {
+        const startTime = Date.now();
+        let lastUpdate = startTime;
+        let lastLoaded = 0;
+        
         xhr.open('POST', '/upload');
         xhr.onload = () => resolve(xhr);
         xhr.onerror = () => reject(new Error('Network error'));
+        xhr.upload.addEventListener('progress', (e) => {
+          if (!e.lengthComputable) return;
+          const now = Date.now();
+          const pct = Math.round((e.loaded / e.total) * 100);
+          progressFill.style.width = pct + '%';
+          
+          if (now - lastUpdate > 500) {
+            const bytesPerMs = (e.loaded - lastLoaded) / (now - lastUpdate);
+            const remainingBytes = e.total - e.loaded;
+            const remainingMs = bytesPerMs > 0 ? remainingBytes / bytesPerMs : 0;
+            const seconds = Math.ceil(remainingMs / 1000);
+            
+            let label = `Uploading... ${pct}%`;
+            if (seconds > 0 && pct < 99) {
+              const mins = Math.floor(seconds / 60);
+              const secs = seconds % 60;
+              label += ` – ${mins}m ${secs}s remaining`;
+            }
+            progressLabel.textContent = label;
+            
+            lastUpdate = now;
+            lastLoaded = e.loaded;
+          }
+        });
         xhr.send(formData);
       });
 
       progressFill.style.width = '100%';
-      progressLabel.textContent = 'Processing...';
+      progressFill.classList.add('processing');
+      
+      let processingTime = 0;
+      const processingInterval = setInterval(() => {
+        processingTime++;
+        const mins = Math.floor(processingTime / 60);
+        const secs = processingTime % 60;
+        progressLabel.textContent = `Processing... ${mins}m ${secs}s elapsed`;
+      }, 1000);
 
       if (response.status !== 200) {
         const err = JSON.parse(response.responseText);
@@ -625,6 +695,8 @@
       }
 
       const data = JSON.parse(response.responseText);
+      clearInterval(processingInterval);
+      progressFill.classList.remove('processing');
       progressLabel.textContent = 'Done!';
       status.textContent = 'Redacted PDF and key generated successfully.';
       status.className = 'status success';
