@@ -117,17 +117,30 @@ ADDRESS_LABEL_RE = re.compile(
     r"([A-Za-z0-9\s,\.\-\#\/]{10,150}?)(?=\n|$)"
 )
 
-# Regex to detect unlabelled street addresses (letterhead / recipient block style).
-# Matches lines like: "0749 Stokes Vista Suite 450, North Angela, OH 43648"
-# Pattern: starts with house number, has street name, optional suite/apt, city, state, zip.
+# US-style: "123 Main St, Suite 4, Springfield, IL 62701"
 ADDRESS_STREET_RE = re.compile(
     r"(?m)^\s*"
-    r"(\d{1,6}"                                          # house number
-    r"(?:\s+[A-Za-z0-9]+){2,6}"                         # street name words
-    r"(?:\s+(?:Suite|Ste|Apt|Apt\.|Floor|Fl|Unit|#)\s*\d+[A-Za-z]?)?"  # optional unit
-    r",\s*[A-Za-z\s]{2,30}"                              # city
-    r",\s*[A-Z]{2}"                                      # state abbreviation
-    r"\s+\d{5}(?:-\d{4})?)"                              # ZIP / ZIP+4
+    r"(\d{1,6}"
+    r"(?:\s+[A-Za-z0-9]+){2,6}"
+    r"(?:\s+(?:Suite|Ste|Apt|Apt\.|Floor|Fl|Unit|#)\s*\d+[A-Za-z]?)?"
+    r",\s*[A-Za-z\s]{2,30}"
+    r",\s*[A-Z]{2}"
+    r"\s+\d{5}(?:-\d{4})?)"
+    r"\s*$"
+)
+
+# European/international style: "Seestrasse 88" or "Rue de la Paix 12" or "Via Roma 5"
+# Matches lines where a street name (with optional suffix like strasse/straße/rue/via/str)
+# is followed by a house number, OR a number follows the street name.
+ADDRESS_EURO_RE = re.compile(
+    r"(?im)^\s*"
+    r"("
+    # Style 1: StreetName + number  e.g. "Seestrasse 88", "Bahnhofstrasse 4"
+    r"(?:[A-ZÄÖÜ][a-zäöüß]+(?:strasse|straße|strasse|gasse|weg|allee|platz|ring|"
+    r"rue|avenue|boulevard|via|calle|str\.?)\s+\d+[A-Za-z]?"
+    r"|[A-ZÄÖÜ][a-zäöüß\s]{3,30}\s+\d+[A-Za-z]?)"
+    r"(?:,\s*[A-Za-z0-9\s,\-]{0,80})?"   # optional city/country continuation
+    r")"
     r"\s*$"
 )
 
@@ -157,12 +170,17 @@ def _extract_address_entities(text, existing_entities):
                 "score": 0.92
             })
 
-    # Strategy 1: labelled addresses
+    # Strategy 1: labelled addresses  e.g. "Address: 123 Main St, ..."
     for m in ADDRESS_LABEL_RE.finditer(text):
         _add(m.start(1), m.end(1), m.group(1))
 
-    # Strategy 2: unlabelled street addresses (letterhead style)
+    # Strategy 2: unlabelled US street addresses (letterhead style)
     for m in ADDRESS_STREET_RE.finditer(text):
+        _add(m.start(1), m.end(1), m.group(1))
+
+    # Strategy 3: unlabelled European/international street addresses
+    # e.g. "Seestrasse 88", "Bahnhofstrasse 4, Zürich", "Rue de Rivoli 12"
+    for m in ADDRESS_EURO_RE.finditer(text):
         _add(m.start(1), m.end(1), m.group(1))
 
     return extra
@@ -364,26 +382,22 @@ def _remove_false_positives(entities, text, document_type):
         if et == "FINANCIAL_AMOUNT":
             continue
 
-        # ── FIX 1: Skip any entity whose span falls inside a currency expression ─
-        # This prevents "$50,000" from having "50,000" redacted as DATE_TIME/NRP.
-        if et in ("DATE_TIME", "NRP", "ID_NUMBER", "NUMBER", "LOCATION") and any(
+        # ── Skip any entity whose span falls inside a currency expression ──────
+        # This prevents "$50,000" having "50,000" redacted as NRP/ID_NUMBER.
+        if et in ("NRP", "ID_NUMBER", "NUMBER", "LOCATION") and any(
             cs <= entity["start"] and entity["end"] <= ce
             for cs, ce in currency_spans
         ):
             continue
 
-        # ── Never redact age values (any entity type) ─────────────────────────
-        # Covers "Age: 34", "age: forty-two", "Age 28" etc.
-        # Check up to 20 chars before entity for the standalone word "age".
-        _pre = text[max(0, entity["start"] - 20):entity["start"]].lower()
-        if re.search(r'\bage\s*[:\-]?\s*$', _pre):
+        # ── Never redact dates ─────────────────────────────────────────────────
+        # DATE_TIME entities (issue dates, due dates, DOB labels etc.) should
+        # remain visible. DOB is handled separately as a special PII field by
+        # the caller if needed; here we suppress all date redaction entirely.
+        if et == "DATE_TIME":
             continue
 
-        # ── Skip pure short numeric strings mis-tagged as DATE_TIME ───────────
-        if et == "DATE_TIME" and re.fullmatch(r'\d{1,3}', t.strip()):
-            continue
 
-        # ── Existing filters ───────────────────────────────────────────────────
         if et == "SWIFT_BIC" and (t in SWIFT_FALSE_POSITIVES or not t.isupper()):
             continue
         if et == "PERSON" and t in PERSON_FALSE_POSITIVES:
@@ -400,16 +414,6 @@ def _remove_false_positives(entities, text, document_type):
         if et == "URL" and any(s <= entity["start"] and entity["end"] <= e for s, e in email_spans):
             continue
         if et == "LOCATION" and len(t) == 2 and t.isupper():
-            continue
-        # Filter "30 days", "7 days", "24 hours" etc — durations not dates
-        if et == "DATE_TIME" and any(
-            t.lower().endswith(unit)
-            for unit in [" days", " day", " hours", " hour", " weeks", " week",
-                         " months", " month", " years", " year"]
-        ):
-            continue
-        # Filter short pure numbers detected as dates
-        if et == "DATE_TIME" and t.strip().isdigit() and len(t.strip()) <= 2:
             continue
 
         filtered.append(entity)
@@ -542,24 +546,44 @@ def detect_pii(text, language="auto", document_type="auto"):
     all_entities += _extract_address_entities(text, all_entities)
 
     # ── Extract names from label patterns missed by spaCy ─────────────────────
-    # e.g. "Insured Name: Amanda Coleman", "Taxpayer Name: Tyler Moore"
+    # Covers structured labels like:
+    #   "Insured Name:", "Patient Name:", "Insured person:", "Insured:",
+    #   "Referring physician:", "Attending:", "Dr.", etc.
     name_label_re = re.compile(
-        r"(?i)(?:insured|taxpayer|signer|patient|employee|member|"
+        r"(?i)"
+        r"(?:"
+        # Pattern A: "<role> name: FirstName LastName"
+        r"(?:insured|taxpayer|signer|patient|employee|member|"
         r"policy.?holder|claimant|beneficiary|account.?holder|"
         r"authorized|contact|primary|secondary|full)\s+name\s*[:\-]\s*"
         r"([A-Z][a-z]+(?:[ ][A-Z][a-z]+)+)"
+        r"|"
+        # Pattern B: "Insured person: FirstName LastName"  /  "Insured: FirstName LastName"
+        r"(?:insured\s+person|insured|patient|guarantor|subscriber|member|holder)"
+        r"\s*[:\-]\s*"
+        r"([A-Z][a-z]+(?:[ ][A-Z][a-z]+)+)"
+        r"|"
+        # Pattern C: "Referring physician: Dr. FirstName LastName"
+        r"(?:referring\s+physician|attending\s+physician|physician|doctor|"
+        r"referring\s+doctor|attending|provider)\s*[:\-]\s*(?:Dr\.?\s*)?"
+        r"([A-Z][a-z]+(?:[ ][A-Z][a-z]+)+)"
+        r")"
     )
     for m in name_label_re.finditer(text):
-        start = m.start(1)
-        end = m.end(1)
+        # group(1) = Pattern A, group(2) = Pattern B, group(3) = Pattern C
+        grp = next((i for i in (1, 2, 3) if m.group(i)), None)
+        if grp is None:
+            continue
+        start = m.start(grp)
+        end = m.end(grp)
         already = any(e["start"] <= start and end <= e["end"] for e in all_entities)
         if not already:
             all_entities.append({
                 "entity_type": "PERSON",
-                "text": m.group(1),
+                "text": m.group(grp),
                 "start": start,
                 "end": end,
-                "score": 0.9
+                "score": 0.92
             })
 
     # ── FIX 2: Extract company/insurer names after a Company/Insurer label ─────
