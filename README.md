@@ -2,7 +2,7 @@
 
 > **Redact sensitive PDFs locally, share safely, restore anytime with your personal key.**
 
-PrivacyShield is a local-first PDF redaction system that automatically detects and blacks out personal information (PII) in PDF documents — with no data ever leaving your device. Every redaction is reversible: a unique encryption key lets the document owner restore original content at any time.
+PrivacyShield is a local-first PDF redaction system that automatically detects and blacks out personal information (PII) in PDF documents  with no data ever leaving your device. Every redaction is reversible: a unique encryption key lets the document owner restore original content at any time.
 
 ---
 
@@ -248,22 +248,6 @@ pip install "numpy<2.0"
 - Ensure the PDF is not password-protected
 - Check the terminal for detailed error messages
 
----
-
-## Tech Stack
-
-| Component | Library |
-|---|---|
-| Web framework | Flask |
-| REST API | FastAPI + Uvicorn |
-| NER / PII detection | Microsoft Presidio + spaCy |
-| PDF text extraction | pdfplumber |
-| PDF rendering / redaction | PyMuPDF (fitz) |
-| PDF → image conversion | pypdfium2 |
-| OCR (scanned pages) | PaddleOCR |
-| Image redaction | Pillow (PIL) |
-| Encryption | cryptography (Fernet) |
-| Language detection | langdetect |
 
 ---
 
